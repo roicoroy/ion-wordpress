@@ -1,45 +1,47 @@
-<ion-header>
+<!-- <ion-header>
   <ion-toolbar class="home-toolbar">
     <ion-buttons slot="end">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
   </ion-toolbar>
-</ion-header>
-
+</ion-header> -->
 
 <ion-content>
 
-  <section class="mb-10">
-    <div class="p-5 text-center bg-image jarallax"
-      style="background-image: url(&quot;assets/banners/shop.png&quot;); height: 500px; background-size: cover; background-position: 50% 50%;"
-      aria-controls="#picker-editor"></div> <!-- Background image -->
-    <div class="container">
-      <div class="card mx-4 mx-md-5 text-center shadow-5-strong"
-        style=" margin-top: -170px; background: hsla(0, 0%, 100%, 0.7); backdrop-filter: blur(30px); ">
-        <div class="card-body px-4 py-5 px-md-5">
-          <h1 class="display-10 fw-bold ls-tight mb-4">
-            <span>Welcome to my</span>
-            <br>
-            <span class="text-primary">
-              Online Shop!
-            </span>
-          </h1>
-          <!-- <a id="present-alert" class="btn btn-outline-primary btn-lg py-3 px-5 mb-2 mb-md-0 me-md-2" role="button">
-            ENTER SHOP
-          </a> -->
+  <ion-row>
+    <ion-col size="12">
+      <div class="p-5 text-center bg-image jarallax"
+        style="background-image: url(&quot;assets/banners/shop.png&quot;); height: 500px; background-size: cover; background-position: 50% 50%;"
+        aria-controls="#picker-editor"></div>
+      <div class="container">
+        <div class="card mx-4 mx-md-5 text-center shadow-5-strong"
+          style=" margin-top: -170px; background: hsla(0, 0%, 100%, 0.7); backdrop-filter: blur(30px); ">
+          <div class="card-body px-4 py-5 px-md-5">
+            <h1 class="display-10 fw-bold ls-tight mb-4">
+              <span>Welcome to my</span>
+              <br>
+              <span class="text-primary">
+                Online Shop!
+              </span>
+            </h1>
 
-          <ion-button id="present-alert" class="py-3 px-5 mb-2 mb-md-0 me-md-2" fill="outline" size="large">
-            ENTER SHOP
-          </ion-button>
+            <a [href]="this.env">
+              ENTER SHOP Blue host
+            </a>
+            
+            <ion-button id="present-alert" fill="outline" size="large">
+              ENTER SHOP ALERT
+            </ion-button>
 
-          <ion-alert trigger="present-alert" header="Thank you for your visit"
-            message="on-line shop is coming soon!" [buttons]="alertButtons">
-          </ion-alert>
+            <ion-alert trigger="present-alert" header="Thank you for your visit" message="on-line shop is coming soon!"
+              [buttons]="alertButtons">
+            </ion-alert>
 
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </ion-col>
+  </ion-row>
 
   <ion-row>
     <ion-col size="12">
@@ -47,7 +49,7 @@
         <h2 class="fw-bold mb-5 text-center">
           Welcome
         </h2>
-        <!-- <div class="row gx-lg-5">
+        <div class="row gx-lg-5">
           <div class="col-lg-4 col-md-12 mb-4 mb-lg-0">
             <div>
               <div class="bg-image hover-overlay ripple shadow-1-strong rounded-4 mb-4" data-mdb-ripple-color="light">
@@ -85,14 +87,14 @@
                 nisl dui quis diam. Mauris ut risus eget massa volutpat feugiat. Donec.</p>
             </div>
           </div>
-        </div> -->
+        </div>
       </section>
     </ion-col>
   </ion-row>
 
-  <div class="view jarallax" style="height: 20vh;">
+  <!-- <div class="view jarallax" style="height: 20vh;">
     <img class="jarallax-img" src="assets/parallax/hd-4.jpg" alt="">
-  </div>
+  </div> -->
 
   <!-- <ion-row class="ion-padding">
     <ion-col size="12">
@@ -157,8 +159,6 @@
     </ion-col>
   </ion-row> -->
 
-
-
   <!-- <div class="view jarallax" style="height: 50vh;">
     <img class="jarallax-img" src="assets/parallax/hd-2.jpg" alt="">
 
@@ -192,7 +192,7 @@
     </ion-card-content>
   </ion-card> -->
 
-  <ion-grid fixed class="footer-grid">
+  <ion-grid class="footer-grid">
     <ion-row class="top-row">
       <ion-col>
         <h2 class="fw-bold">

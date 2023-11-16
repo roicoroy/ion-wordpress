@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  wordpressShopUrl: 'https://fae.zra.mybluehost.me/shop',
+  wordpressShopUrlLocal: 'http://localhost:8887/shop',
 };
 
 /*

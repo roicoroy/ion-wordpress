@@ -24,3 +24,139 @@
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
+
+
+@import "swiper/scss";
+@import "swiper/scss/navigation";
+@import "swiper/scss/pagination";
+@import "./assets/driver.css";
+
+@font-face {
+    font-family: 'Rampart One'; //This is what we are going to call
+    src: url('../src/assets/fonts/Rampart_One/RampartOne-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Montserrat'; //This is what we are going to call
+    src: url('../src/assets/fonts/Montserrat/static/Montserrat-Regular.ttf');
+}
+
+.rampart-font {
+    font-family: 'Rampart One';
+}
+
+ion-title {
+    font-family: 'Rampart One';
+}
+
+ion-text.title {
+    font-family: "Rampart One";
+    font-size: 3rem;
+}
+
+.logo-svg {
+    font-weight: bold;
+    height: 100%;
+    background: rgba($color: #000000, $alpha: 0.4);
+
+    svg {
+        textPath {
+            font-family: 'Rampart One';
+            font-size: 4.1rem;
+        }
+
+        path {
+            fill: transparent;
+        }
+
+        text {
+            fill: var(--ion-color-light);
+        }
+    }
+}
+
+// ion-menu-button {
+//     --color: var(--ion-color-tertiary);
+// }
+
+ion-toast.custom-toast {
+    --background: #f4f4fa;
+    --box-shadow: 3px 3px 10px 0 rgba(0, 0, 0, 0.2);
+    --color: #4b4a50;
+}
+
+ion-toast.custom-toast::part(message) {
+    font-style: italic;
+}
+
+ion-toast.custom-toast::part(button) {
+    border-left: 1px solid #d2d2d2;
+    color: #030207;
+    font-size: 15px;
+}
+
+
+.driver-popover.driverjs-theme {
+    background-color: #fde047;
+    color: #000;
+}
+
+.driver-popover.driverjs-theme .driver-popover-title {
+    font-size: 10px;
+}
+
+.driver-popover.driverjs-theme .driver-popover-description {
+    font-size: 10px;
+}
+
+.driver-popover.driverjs-theme .driver-popover-title,
+.driver-popover.driverjs-theme .driver-popover-description,
+.driver-popover.driverjs-theme .driver-popover-progress-text {
+    color: #000;
+}
+
+.driver-popover.driverjs-theme button {
+    flex: 1;
+    text-align: center;
+    background-color: #000;
+    color: #ffffff;
+    border: 2px solid #000;
+    text-shadow: none;
+    font-size: 10px;
+    padding: 5px 8px;
+    border-radius: 6px;
+}
+
+.driver-popover.driverjs-theme button:hover {
+    background-color: #000;
+    color: #ffffff;
+}
+
+.driver-popover.driverjs-theme .driver-popover-navigation-btns {
+    justify-content: space-between;
+    gap: 3px;
+}
+
+.driver-popover.driverjs-theme .driver-popover-close-btn {
+    color: #9b9b9b;
+}
+
+.driver-popover.driverjs-theme .driver-popover-close-btn:hover {
+    color: #000;
+}
+
+.driver-popover.driverjs-theme .driver-popover-arrow-side-left.driver-popover-arrow {
+    border-left-color: #fde047;
+}
+
+.driver-popover.driverjs-theme .driver-popover-arrow-side-right.driver-popover-arrow {
+    border-right-color: #fde047;
+}
+
+.driver-popover.driverjs-theme .driver-popover-arrow-side-top.driver-popover-arrow {
+    border-top-color: #fde047;
+}
+
+.driver-popover.driverjs-theme .driver-popover-arrow-side-bottom.driver-popover-arrow {
+    border-bottom-color: #fde047;
+}

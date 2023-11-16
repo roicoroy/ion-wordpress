@@ -7,6 +7,7 @@ import { jarallax } from "jarallax";
 import { TermsOfServiceComponent } from '../components/terms-of-service/terms-of-service.component';
 import { IonStorageService } from '../shared/utils/ionstorage.service';
 import { NavigationService } from '../shared/utils/navigation.service';
+import { environment } from 'src/environments/environment';
 
 const COOKIES_ACCEPTED = 'cookiesAccepted';
 
@@ -60,6 +61,8 @@ export class HomePage implements OnInit {
 
   alertButtons = ['Ok'];
 
+  env = environment.wordpressShopUrl;
+
   constructor(
     public platform: Platform,
     public modalController: ModalController,
@@ -72,7 +75,6 @@ export class HomePage implements OnInit {
   }
 
   ionViewDidEnter() {
-
   }
 
   ngAfterViewInit(): void {
@@ -128,6 +130,10 @@ export class HomePage implements OnInit {
     await toast.present();
   }
 
+  enterBlueHostShop() {
+    // this.nav.navigateFadeOut(environment.wordpressShopUrl);
+  }
+  
   navigateFirstPage() {
     this.nav.navigateFadeOut('welcome');
   }
