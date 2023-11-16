@@ -11,23 +11,31 @@
 
   <section class="mb-10">
     <div class="p-5 text-center bg-image jarallax"
-      style="background-image: url(&quot;https://images.unsplash.com/photo-1604719312566-8912e9227c6a?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w5NjI0M3wwfDF8c2VhcmNofDEwfHxtYXJrZXR8ZW58MHx8fHwxNjk5NjMyMzk2fDA&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1080&quot;); height: 500px; background-size: cover; background-position: 50% 50%;"
+      style="background-image: url(&quot;assets/banners/shop.png&quot;); height: 500px; background-size: cover; background-position: 50% 50%;"
       aria-controls="#picker-editor"></div> <!-- Background image -->
     <div class="container">
       <div class="card mx-4 mx-md-5 text-center shadow-5-strong"
         style=" margin-top: -170px; background: hsla(0, 0%, 100%, 0.7); backdrop-filter: blur(30px); ">
         <div class="card-body px-4 py-5 px-md-5">
           <h1 class="display-10 fw-bold ls-tight mb-4">
-            <span>Mini Mercado Amigão</span>
+            <span>Welcome to my</span>
             <br>
             <span class="text-primary">
-              em Alvares Florence
+              Online Shop!
             </span>
           </h1>
-          <a class="btn  btn-outline-primary btn-lg py-3 px-5 mb-2 mb-md-0 me-md-2" href="#" role="button"
-            aria-controls="#picker-editor">
-            Leia nossa estória
-          </a>
+          <!-- <a id="present-alert" class="btn btn-outline-primary btn-lg py-3 px-5 mb-2 mb-md-0 me-md-2" role="button">
+            ENTER SHOP
+          </a> -->
+
+          <ion-button id="present-alert" class="py-3 px-5 mb-2 mb-md-0 me-md-2" fill="outline" size="large">
+            ENTER SHOP
+          </ion-button>
+
+          <ion-alert trigger="present-alert" header="Thank you for your visit"
+            message="on-line shop is coming soon!" [buttons]="alertButtons">
+          </ion-alert>
+
         </div>
       </div>
     </div>
@@ -37,9 +45,9 @@
     <ion-col size="12">
       <section class="mb-10 text-center text-lg-start">
         <h2 class="fw-bold mb-5 text-center">
-          Servimos bem para servir sempre
+          Welcome
         </h2>
-        <div class="row gx-lg-5">
+        <!-- <div class="row gx-lg-5">
           <div class="col-lg-4 col-md-12 mb-4 mb-lg-0">
             <div>
               <div class="bg-image hover-overlay ripple shadow-1-strong rounded-4 mb-4" data-mdb-ripple-color="light">
@@ -77,16 +85,16 @@
                 nisl dui quis diam. Mauris ut risus eget massa volutpat feugiat. Donec.</p>
             </div>
           </div>
-        </div>
+        </div> -->
       </section>
     </ion-col>
   </ion-row>
 
   <div class="view jarallax" style="height: 20vh;">
-    <img class="jarallax-img" src="assets/parallax/hd-2.jpg" alt="">
+    <img class="jarallax-img" src="assets/parallax/hd-4.jpg" alt="">
   </div>
 
-  <ion-row class="ion-padding">
+  <!-- <ion-row class="ion-padding">
     <ion-col size="12">
       <section class="mb-10">
         <h2 class="fw-bold mb-5 text-center">Nossas Ofertas</h2>
@@ -100,11 +108,10 @@
           </div>
           <div class="col-md-6 mb-4 mb-md-0">
             <h3 class="fw-bold">Melhor açougue da região</h3>
-            <div class="mb-2 text-danger small"> 
-              <i class="fas fa-globe-americas me-2"
-                aria-controls="#picker-editor"></i>
-                <span>Travels</span> 
-              </div>
+            <div class="mb-2 text-danger small">
+              <i class="fas fa-globe-americas me-2" aria-controls="#picker-editor"></i>
+              <span>Travels</span>
+            </div>
             <p class="text-muted">Ut pretium ultricies dignissim. Sed sit amet mi eget urna placerat vulputate. Ut
               vulputate est non quam dignissim elementum. Donec a ullamcorper diam.</p>
           </div>
@@ -119,12 +126,11 @@
           </div>
           <div class="col-md-6 mb-4 mb-md-0">
             <h3 class="fw-bold">Feirinha todas as quartas e quintas feiras</h3>
-            <div class="mb-2 text-primary small"> 
-              <i class="fas fa-palette me-2"
-                aria-controls="#picker-editor">
+            <div class="mb-2 text-primary small">
+              <i class="fas fa-palette me-2" aria-controls="#picker-editor">
               </i>
-                <span>Art</span> 
-              </div>
+              <span>Art</span>
+            </div>
             <p class="text-muted">Suspendisse in volutpat massa. Nulla facilisi. Sed aliquet diam orci, nec ornare
               metus semper sed. Integer volutpat ornare erat sit amet rutrum.</p>
           </div>
@@ -149,7 +155,7 @@
         </div>
       </section>
     </ion-col>
-  </ion-row>
+  </ion-row> -->
 
 
 

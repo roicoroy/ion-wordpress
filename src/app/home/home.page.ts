@@ -58,6 +58,8 @@ export class HomePage implements OnInit {
     }
   ];
 
+  alertButtons = ['Ok'];
+
   constructor(
     public platform: Platform,
     public modalController: ModalController,
