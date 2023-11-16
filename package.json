@@ -10,8 +10,14 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
+    "android": "ionic build && npx cap sync && npx cap open android",
     "deploy-apache-local": "npm run build && cp -r /Users/ricardobento/Documents/AMIGAO-WORDPRESS/ion-wordpress/www/* /Applications/MAMP/htdocs/public",
-    "corodva-res": "cordova-res --skip-config --copy"
+    "corodva-res": "cordova-res --skip-config --copy",
+    "build-android-signed": "npx cap build android  --keystorepath '/Users/ricardobento/Documents/AMIGAO-WORDPRESS/ion-wordpress/ion-wordpress.keystore' --keystorepass Rwbento123!   --keystorealias alias   --keystorealiaspass Rwbento123! --androidreleasetype APK --signing-type apksigner",
+    "verify-deep-links": "adb shell pm get-app-links ion.wordpress.uk",
+    "test-deep": "adb shell am start -a android.intent.action.VIEW -d 'https://ion-pwa-fire.web.app/home' ion.wordpress.uk",
+    "test-deep1": " adb shell am start -a android.intent.action.VIEW -c android.intent.category.BROWSABLE -d https://ion-pwa-fire.web.app/home",
+    "test-deep2": "adb shell dumpsys package domain-preferred-apps"
   },
   "private": true,
   "dependencies": {
