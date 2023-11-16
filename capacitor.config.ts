@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'ion.wordpress.uk',
   appName: 'ion-wordpress',
   webDir: 'www',
   server: {
