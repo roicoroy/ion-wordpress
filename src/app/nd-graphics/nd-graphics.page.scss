@@ -1,0 +1,26 @@
+ion-toolbar.top-toolbar {
+    // height: 3rem;
+    display: flex;
+    align-items: center;
+
+    ion-title {
+        ion-icon.top-logo-icon {
+            font-size: 5rem;
+            margin-top: 1%;
+        }
+    }
+}
+
+
+ion-toolbar.header-toolbar {
+    height: 100%;
+
+    .header-logo-condense {
+    }
+}
+
+.terms-row {
+    a {
+        color: inherit;
+    }
+}

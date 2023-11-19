@@ -4,7 +4,7 @@ export const routes: Routes = [
   {
     path: '',
     // redirectTo: 'folder/inbox',
-    redirectTo: 'home',
+    redirectTo: 'nd-graphics',
     pathMatch: 'full',
   },
   {
@@ -15,5 +15,9 @@ export const routes: Routes = [
   {
     path: 'home',
     loadComponent: () => import('./home/home.page').then( m => m.HomePage)
+  },
+  {
+    path: 'nd-graphics',
+    loadComponent: () => import('./nd-graphics/nd-graphics.page').then( m => m.NdGraphicsPage)
   },
 ];

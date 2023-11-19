@@ -8,6 +8,7 @@ import { TermsOfServiceComponent } from '../components/terms-of-service/terms-of
 import { IonStorageService } from '../shared/utils/ionstorage.service';
 import { NavigationService } from '../shared/utils/navigation.service';
 import { environment } from 'src/environments/environment';
+import { ShareService } from '../shared/utils/share.service';
 
 const COOKIES_ACCEPTED = 'cookiesAccepted';
 
@@ -66,10 +67,9 @@ export class HomePage implements OnInit {
   constructor(
     public platform: Platform,
     public modalController: ModalController,
-    private toastController: ToastController
-  ) {
-
-  }
+    private toastController: ToastController,
+    private share: ShareService,
+  ) { }
 
   ionViewWillEnter() {
   }
@@ -130,10 +130,18 @@ export class HomePage implements OnInit {
     await toast.present();
   }
 
+  shareLink() {
+    this.share.share(
+      'Hello friend',
+      'Look at my shop, please :)',
+      'https://fae.zra.mybluehost.me/public',
+    )
+  }
+
   enterBlueHostShop() {
     // this.nav.navigateFadeOut(environment.wordpressShopUrl);
   }
-  
+
   navigateFirstPage() {
     this.nav.navigateFadeOut('welcome');
   }

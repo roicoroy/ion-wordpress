@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'ion.wordpress.uk',
-  appName: 'ion-wordpress',
+  appName: 'ND Graphics',
   webDir: 'www',
   server: {
     androidScheme: 'https'
