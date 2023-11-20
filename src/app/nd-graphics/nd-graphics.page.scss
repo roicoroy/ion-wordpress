@@ -11,13 +11,23 @@ ion-toolbar.top-toolbar {
     }
 }
 
-
-ion-toolbar.header-toolbar {
-    height: 100%;
-
-    .header-logo-condense {
-    }
+.image {
+    background-image: url("../../assets/logo/logo.png");
+    height: 30vh;
+    background-size: cover;
+    background-position: 50% 50%;
+    background-color: red;
 }
+
+// .jarallax {
+//     height: 20vh;
+// }
+
+// ion-toolbar.header-toolbar {
+//     height: 100%;
+
+//     .header-logo-condense {}
+// }
 
 .terms-row {
     a {

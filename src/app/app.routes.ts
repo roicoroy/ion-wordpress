@@ -20,4 +20,8 @@ export const routes: Routes = [
     path: 'nd-graphics',
     loadComponent: () => import('./nd-graphics/nd-graphics.page').then( m => m.NdGraphicsPage)
   },
+  {
+    path: 'woo-products',
+    loadComponent: () => import('./woo-products/woo-products.page').then( m => m.WooProductsPage)
+  },
 ];

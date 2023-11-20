@@ -1,0 +1,25 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Woo Products</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" *ngIf="viewState$ | async as vs" color="warning">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Woo Products</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div id="container">
+    <!-- <app-woo-products [products]="productsList"></app-woo-products> -->
+
+    <!-- <ion-card>      
+      <div>
+        <ion-card-content *ngFor="let p of productsList">
+          {{ p?.name  }}
+        </ion-card-content>
+      </div>
+    </ion-card> -->
+  </div>
+</ion-content>

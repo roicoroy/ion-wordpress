@@ -1,0 +1,19 @@
+<ion-card>
+  <ion-card-header>
+    <ion-card-subtitle>
+      {{ title }}
+    </ion-card-subtitle>
+    <ion-card-title>
+      {{ subtitle }}
+    </ion-card-title>
+  </ion-card-header>
+
+  <ion-card-content *ngFor="let p of products" (click)="onPin(p)">
+
+    <ion-label>
+      <p>{{ p?.name }}</p>
+    </ion-label>
+
+  </ion-card-content>
+
+</ion-card>

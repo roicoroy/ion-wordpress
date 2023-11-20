@@ -7,7 +7,7 @@
       <ion-button color="dark" fill="outline" shape="round">
         <ion-icon name="call"></ion-icon>
       </ion-button>
-      <ion-button color="dark" id="open-modal" data-aos="fade-up" fill="outline" shape="round">
+      <ion-button color="dark" id="open-modal" fill="outline" shape="round">
         <ion-icon name="mail"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -15,12 +15,10 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" id="local-ion-content">
-  
   <ion-header collapse="condense" class="condense-header">
     <ion-toolbar class="header-toolbar">
-      <div class="header-logo-condense">
-        <img [src]="'assets/logo/logo.png'" alt="">
-      </div>
+      <div class="image jarallax"></div>
+      <!-- <ion-img [src]="'assets/shapes/'"></ion-img> -->
     </ion-toolbar>
   </ion-header>
 
@@ -69,38 +67,36 @@
         </div>
       </section>
 
-      <ion-grid class="swiper-gallery">
-        <ion-row>
-          <ion-col size="12">
-            <ion-text>
-              <h1>Vehicles</h1>
-            </ion-text>
-            <swiper-container style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff" class="mySwiper"
-              zoom="true" navigation="true" pagination="true" pagination-clickable="true">
-              <swiper-slide *ngFor="let image of gallery">
-                <div class="swiper-zoom-container">
-                  <img src="{{ image }}" />
-                </div>
-              </swiper-slide>
-            </swiper-container>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col size="12">
-            <ion-text>
-              <h1>Signs</h1>
-            </ion-text>
-            <swiper-container style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff" class="mySwiper"
-              zoom="true" navigation="true" pagination="true" pagination-clickable="true">
-              <swiper-slide *ngFor="let image of gallery">
-                <div class="swiper-zoom-container">
-                  <img src="{{ image }}" />
-                </div>
-              </swiper-slide>
-            </swiper-container>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+      <ion-row>
+        <ion-col size="12">
+          <ion-text>
+            <h1>Vehicles</h1>
+          </ion-text>
+          <swiper-container style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff" class="mySwiper"
+            zoom="true" navigation="true" pagination="true" pagination-clickable="true">
+            <swiper-slide *ngFor="let image of gallery">
+              <div class="swiper-zoom-container">
+                <img src="{{ image }}" />
+              </div>
+            </swiper-slide>
+          </swiper-container>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <ion-text>
+            <h1>Signs</h1>
+          </ion-text>
+          <swiper-container style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff" class="mySwiper"
+            zoom="true" navigation="true" pagination="true" pagination-clickable="true">
+            <swiper-slide *ngFor="let image of gallery">
+              <div class="swiper-zoom-container">
+                <img src="{{ image }}" />
+              </div>
+            </swiper-slide>
+          </swiper-container>
+        </ion-col>
+      </ion-row>
 
       <!-- <section class="customer-feedback" id="feedback-section">
         <div class="row">
@@ -266,6 +262,7 @@
           </ion-content>
         </ng-template>
       </ion-modal>
+
     </div>
   </div>
 </ion-content>
