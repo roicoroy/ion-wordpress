@@ -47,8 +47,6 @@
               "node_modules/jarallax/dist/jarallax.js",
               "node_modules/jarallax/dist/jarallax-video.js",
               "node_modules/jarallax/dist/jarallax-element.js",
-              "src/assets/nd-graphics-landing-page/vendors/jquery/jquery.min.js",
-              "src/assets/nd-graphics-landing-page/vendors/bootstrap/bootstrap.min.js",
               "src/assets/nd-graphics-landing-page/vendors/owl-carousel/js/owl.carousel.min.js",
               "src/assets/nd-graphics-landing-page/vendors/aos/js/aos.js"
             ]

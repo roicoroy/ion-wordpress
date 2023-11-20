@@ -11,34 +11,6 @@ register();
 
 declare let $: any;
 declare let AOS: any;
-// declare let owlCarousel: any;
-
-import { StatusBar, Style } from '@capacitor/status-bar';
-
-// iOS only
-window.addEventListener('statusTap', function () {
-  console.log('statusbar tapped');
-});
-
-// Display content under transparent status bar (Android only)
-StatusBar.setOverlaysWebView({ overlay: true });
-
-const setStatusBarStyleDark = async () => {
-  await StatusBar.setStyle({ style: Style.Dark });
-};
-
-const setStatusBarStyleLight = async () => {
-  await StatusBar.setStyle({ style: Style.Light });
-};
-
-const hideStatusBar = async () => {
-  await StatusBar.hide();
-};
-
-const showStatusBar = async () => {
-  await StatusBar.show();
-};
-
 
 @Component({
   selector: 'app-nd-graphics',
@@ -49,6 +21,11 @@ const showStatusBar = async () => {
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class NdGraphicsPage implements OnInit {
+  
+  @ViewChild(IonModal) modal!: IonModal;
+
+  message = 'This modal example uses triggers to automatically open a modal when the button is clicked.';
+  name!: string;
 
   gallery = [
     'assets/parallax/hd-2.jpg',
@@ -58,20 +35,6 @@ export class NdGraphicsPage implements OnInit {
 
   constructor() { }
 
-
-  @ViewChild(IonModal) modal!: IonModal;
-
-  message = 'This modal example uses triggers to automatically open a modal when the button is clicked.';
-  name!: string;
-
-  async statusHide() {
-    return await showStatusBar();
-  }
-  
-  async statusShow() {
-    return await showStatusBar();
-  }
-  
   cancel() {
     this.modal.dismiss(null, 'cancel');
   }
@@ -109,23 +72,10 @@ export class NdGraphicsPage implements OnInit {
     jarallax(document.querySelectorAll('.jarallax'), {});
 
     jarallax(document.querySelectorAll('.jarallax-img'), {
+      containerClass:'jarallax-image',
+      imgSrc:'assets/shapes.svg',
+      imgRepeat:'no-repeat',
     });
-
-    // HEADER ANIMATION
-    // window.onscroll = function () { scrollFunction() };
-    // var element: any = document.getElementById("local-ion-content");
-    // function scrollFunction() {
-    //   if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
-    //     $(".navbar").addClass("fixed-top");
-    //     element.classList.add("header-small");
-    //     $("local-ion-content").addClass("body-top-padding");
-
-    //   } else {
-    //     $(".navbar").removeClass("fixed-top");
-    //     element.classList.remove("header-small");
-    //     $("local-ion-content").removeClass("body-top-padding");
-    //   }
-    // }
 
     // OWL-CAROUSAL
     $('.owl-carousel').owlCarousel({
@@ -149,21 +99,6 @@ export class NdGraphicsPage implements OnInit {
       }
     })
 
-    // SCROLLSPY
-    // $(document).ready(function () {
-    //   $(".nav-link").click(function () {
-    //     // @ts-ignore
-    //     var t = $(this).attr("href");
-    //     $("html, body").animate({
-    //       scrollTop: $(t).offset().top - 75
-    //     }, {
-    //       duration: 1000,
-    //     });
-    //     $('body').scrollspy({ target: '.navbar', offset: $(t).offset().top });
-    //     return false;
-    //   });
-    // });
-
     // AOS
     AOS.init({
       offset: 120,
@@ -175,27 +110,9 @@ export class NdGraphicsPage implements OnInit {
       anchorPlacement: 'top-bottom',
       disable: "mobile"
     });
-
-    // //SIDEBAR-OPEN
-    // $('#navbarSupportedContent').on('hidden.bs.collapse', function () {
-    //   $("body").removeClass("sidebar-open");
-    // })
-
-    // $('#navbarSupportedContent').on('shown.bs.collapse', function () {
-    //   $("body").addClass("sidebar-open");
-    // })
-
-    // window.onresize = function () {
-    //   var w = window.innerWidth;
-    //   if (w >= 992) {
-    //     $('body').removeClass('sidebar-open');
-    //     $('#navbarSupportedContent').removeClass('show');
-    //   }
-    // }
   }
 
   ngOnInit() {
-
   }
 
 }
