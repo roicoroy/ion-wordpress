@@ -17,6 +17,7 @@ import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
 import { ProductsState } from './app/store/products/products.state';
+import { fadeOutAnimation } from './app/shared/animations/nav-animation';
 
 if (environment.production) {
   enableProdMode();
@@ -30,10 +31,13 @@ bootstrapApplication(AppComponent, {
       multi: true
     },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    provideIonicAngular(),
+    provideIonicAngular({
+      mode: 'ios',
+      navAnimation: fadeOutAnimation
+    }),
     importProvidersFrom(BrowserAnimationsModule),
     importProvidersFrom(HttpClientModule),
-    importProvidersFrom( NgxsModule.forRoot([
+    importProvidersFrom(NgxsModule.forRoot([
       ProductsState
     ], {
       developmentMode: false,
@@ -43,10 +47,10 @@ bootstrapApplication(AppComponent, {
       disabled: true,
     })),
     importProvidersFrom(NgxsStoragePluginModule.forRoot({
-        key: [
-          'products'
-        ]
-      })),
+      key: [
+        'products'
+      ]
+    })),
     importProvidersFrom(NgxsFormPluginModule.forRoot()),
     importProvidersFrom(IonicStorageModule.forRoot()),
     provideRouter(routes),

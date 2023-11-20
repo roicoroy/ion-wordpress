@@ -1,12 +1,11 @@
 import { CUSTOM_ELEMENTS_SCHEMA, Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { jarallax } from "jarallax";
 import { IonModal } from '@ionic/angular';
 import Swiper from 'swiper';
 import { register } from 'swiper/element/bundle';
-// register Swiper custom elements
 register();
 
 declare let $: any;
@@ -18,22 +17,50 @@ declare let AOS: any;
   styleUrls: ['./nd-graphics.page.scss'],
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, ReactiveFormsModule, FormsModule]
 })
 export class NdGraphicsPage implements OnInit {
-  
+
   @ViewChild(IonModal) modal!: IonModal;
 
   message = 'This modal example uses triggers to automatically open a modal when the button is clicked.';
   name!: string;
 
+  subscribeEmail: string = 'test@email.com';
+
   gallery = [
-    'assets/parallax/hd-2.jpg',
-    'assets/parallax/hd-3.jpg',
-    'assets/parallax/hd-4.jpg',
+    'assets/galeria/2.png',
+    'assets/galeria/4.png',
+    'assets/galeria/6.png',
+  ];
+  
+  frontBanner = [
+    {
+      title:'Speed Optimisation',
+      content:'Lorem ipsum dolor sit amet, tincidunt vestibulum. Fusce egeabus consectetuer turpis, suspendisse.',
+      image:'../../assets/banners/cleaning.png'
+    },
+    {
+      title:'Speed Optimisation',
+      content:'Lorem ipsum dolor sit amet, tincidunt vestibulum. Fusce egeabus consectetuer turpis, suspendisse.',
+      image:'../../assets/banners/bebidas.png'
+    },
+    {
+      title:'Speed Optimisation',
+      content:'Lorem ipsum dolor sit amet, tincidunt vestibulum. Fusce egeabus consectetuer turpis, suspendisse.',
+      image:'../../assets/banners/acougue.png'
+    },
   ];
 
   constructor() { }
+
+  // async statusHide() {
+  //   return await showStatusBar();
+  // }
+
+  // async statusShow() {
+  //   return await showStatusBar();
+  // }
 
   cancel() {
     this.modal.dismiss(null, 'cancel');
@@ -41,6 +68,10 @@ export class NdGraphicsPage implements OnInit {
 
   confirm() {
     this.modal.dismiss(this.name, 'confirm');
+  }
+
+  async subscribe() {
+    console.log(this.subscribeEmail);
   }
 
   onWillDismiss(event: Event) {
@@ -69,12 +100,14 @@ export class NdGraphicsPage implements OnInit {
 
     this.swiperInit();
 
-    jarallax(document.querySelectorAll('.jarallax'), {});
+    jarallax(document.querySelectorAll('.jarallax'), {
+      containerClass: 'jarallax-image',
+      imgSrc: '../../assets/logo/logo-para.png',
+      imgRepeat: 'no-repeat',
+    });
 
     jarallax(document.querySelectorAll('.jarallax-img'), {
-      containerClass:'jarallax-image',
-      imgSrc:'assets/shapes.svg',
-      imgRepeat:'no-repeat',
+
     });
 
     // OWL-CAROUSAL
@@ -97,7 +130,7 @@ export class NdGraphicsPage implements OnInit {
           items: 3
         }
       }
-    })
+    });
 
     // AOS
     AOS.init({

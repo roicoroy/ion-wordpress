@@ -1,54 +1,211 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>nd-graphics</ion-title>
+  <ion-toolbar class="top-toolbar">
+    <ion-title>
+      <ion-icon class="top-logo-icon" src="../../assets/logo/Nd-graphics-logo.svg"></ion-icon>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="dark" fill="outline" shape="round">
+        <ion-icon name="call"></ion-icon>
+      </ion-button>
+      <ion-button color="dark" id="open-modal" fill="outline" shape="round">
+        <ion-icon name="mail"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">
-        <ion-img [src]="'assets/shapes.svg'"></ion-img>
-      </ion-title>
+<ion-content [fullscreen]="true" id="local-ion-content">
+  <ion-header collapse="condense" class="condense-header">
+    <ion-toolbar class="header-toolbar">
+      <div class="image jarallax"></div>
     </ion-toolbar>
   </ion-header>
 
 
-  <ion-grid fixed>
-    <ion-row>
-      <ion-col size="12">
-        <ion-text>
-          <h1>Vehicles</h1>
-        </ion-text>
-        <swiper-container style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff" class="mySwiper"
-          zoom="true" navigation="true" pagination="true" pagination-clickable="true">
-          <swiper-slide *ngFor="let image of gallery">
-            <div class="swiper-zoom-container">
-              <img src="{{ image }}" />
+  <div class="">
+    <div class="container">
+
+      <section class="features-overview" id="features-section">
+        <div class="ion-text-center">
+          <h2>How does it works</h2>
+          <h6 class="section-subtitle text-muted">One theme that serves as an easy-to-use operational toolkit<br>that
+            meets customer's needs.</h6>
+        </div>
+        <div class="d-md-flex justify-content-between" *ngFor="let bn of frontBanner">
+          <div class="d-flex justify-content-start">
+            <div class="features-width ion-text-center">
+              <img [src]="bn.image" alt="" class="img-icons">
+              <h5 class="py-3">
+                {{ bn.title }}
+              </h5>
+              <p class="text-muted">
+                {{ bn.content }}
+              </p>
+              <a href="#">
+                <p class="readmore-link">Readmore</p>
+              </a>
             </div>
-          </swiper-slide>
-        </swiper-container>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size="12">
-        <ion-text>
-          <h1>Signs</h1>
-        </ion-text>
-        <swiper-container style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff" class="mySwiper"
-          zoom="true" navigation="true" pagination="true" pagination-clickable="true">
-          <swiper-slide *ngFor="let image of gallery">
-            <div class="swiper-zoom-container">
-              <img src="{{ image }}" />
+          </div>
+        </div>
+      </section>
+
+      <ion-grid>
+        <!-- <ion-row class="features-overview">
+          <ion-col size="4" *ngFor="let bn of frontBanner" class="features-overview">
+            <img [src]="bn.image" alt="">
+            <h5 class="py-3">
+              {{ bn.title }}
+            </h5>
+            <p class="text-muted">
+              {{ bn.content }}
+            </p>
+            <a href="#">
+              <p class="readmore-link">Readmore</p>
+            </a>
+          </ion-col>
+        </ion-row> -->
+
+        <ion-row>
+          <ion-col size="12" size-md="6" size-lg="6">
+            <ion-text>
+              <h1>Vehicles</h1>
+            </ion-text>
+            <swiper-container class="mySwiper" zoom="true" navigation="true" pagination="true"
+              pagination-clickable="true">
+              <swiper-slide *ngFor="let image of gallery">
+                <div class="swiper-zoom-container">
+                  <img src="{{ image }}" />
+                </div>
+              </swiper-slide>
+            </swiper-container>
+          </ion-col>
+          <ion-col size="12" size-md="6" size-lg="6">
+            <ion-text>
+              <h1>Signs</h1>
+            </ion-text>
+            <swiper-container class="mySwiper" zoom="true" navigation="true" pagination="true"
+              pagination-clickable="true">
+              <swiper-slide *ngFor="let image of gallery">
+                <div class="swiper-zoom-container">
+                  <img src="{{ image }}" />
+                </div>
+              </swiper-slide>
+            </swiper-container>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-text-center">
+          <ion-col size="12">
+            <h5 class="pb-2">Get in Touch</h5>
+            <p class="text-muted">Don’t miss any updates of our new templates and extensions.!</p>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="address-row">
+          <ion-col size="6">
+            <form>
+              <input [(ngModel)]="subscribeEmail" [ngModelOptions]="{standalone: true}" type="text" class="form-control"
+                id="Email" placeholder="Email id">
+            </form>
+            <div class="pt-3">
+              <ion-button (click)="subscribe()" expand="block" fill="solid" shape="round">
+                Subscribe
+              </ion-button>
             </div>
-          </swiper-slide>
-        </swiper-container>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-  
-  <br/><br/><br/><br/><br/><br/><br/>
-  <br/><br/><br/><br/><br/><br/><br/>
-  <br/><br/><br/><br/><br/><br/><br/>
-  <br/><br/><br/><br/><br/><br/><br/>
+          </ion-col>
+          <ion-col size="6" class="ion-text-center">
+            <h5 class="pb-2">Our address</h5>
+            <p class="text-muted">518 Schmeler Neck<br>Bartlett. Illinois</p>
+            <div class="pt-2">
+              <p class="text-muted m-0">{{ 'mikayla_beer@feil.name' }}</p>
+              <p class="text-muted m-0">906-179-8309</p>
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-text-center">
+          <ion-col size="4">
+            <ion-button fill="clear">
+              <ion-icon class="mdi mdi-facebook"></ion-icon>
+            </ion-button>
+          </ion-col>
+          <ion-col size="4">
+            <ion-button fill="clear">
+              <ion-icon class="mdi mdi-instagram"></ion-icon>
+            </ion-button>
+          </ion-col>
+          <ion-col size="4">
+            <ion-button fill="clear">
+              <ion-icon class="mdi mdi-linkedin"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12" class="border-top">
+            <p class="text-center text-muted">
+              Copyright © 2023
+              <br />
+              All rights reserved.
+            </p>
+          </ion-col>
+        </ion-row>
+        <ion-row class="ion-text-center terms-row">
+          <ion-col size="4">
+            <a>
+              Terms &
+              Conditions
+            </a>
+          </ion-col>
+          <ion-col size="4">
+            <a>
+              Privacy policy
+            </a>
+          </ion-col>
+          <ion-col size="4">
+            <a>
+              Cookie Policy
+            </a>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+
+
+
+  <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Contact US!</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <div class="modal-header">
+          <h4 class="modal-title" id="exampleModalLabel">Contact Us</h4>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="Name">Name</label>
+              <input type="text" class="form-control" id="Name" placeholder="Name">
+            </div>
+            <div class="form-group">
+              <label for="Email">Email</label>
+              <input type="email" class="form-control" id="Email-1" placeholder="Email">
+            </div>
+            <div class="form-group">
+              <label for="Message">Message</label>
+              <textarea class="form-control" id="Message" placeholder="Enter your Message"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" (click)="cancel()">Close</button>
+          <button type="button" class="btn btn-success" (click)="confirm()">Submit</button>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>
