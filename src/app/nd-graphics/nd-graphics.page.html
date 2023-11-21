@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar class="top-toolbar">
     <ion-title>
-      <ion-icon class="top-logo-icon" src="../../assets/logo/Nd-graphics-logo.svg"></ion-icon>
+      <ion-icon class="top-logo-icon" src="assets/logo/Nd-graphics-logo.svg"></ion-icon>
     </ion-title>
     <ion-buttons slot="end">
       <ion-button color="dark" fill="outline" shape="round">
@@ -21,158 +21,149 @@
     </ion-toolbar>
   </ion-header>
 
+  <div class="banner">
+    <ion-card class="banner-card">
+      <ion-card-header>
+        <ion-card-title class="chalkduster-font">Welcome to</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <img src="assets/logo/logo.png">
+      </ion-card-content>
+    </ion-card>
+  </div>
 
-  <div class="">
-    <div class="container">
+  <ion-grid>
 
-      <section class="features-overview" id="features-section">
-        <div class="ion-text-center">
-          <h2>How does it works</h2>
-          <h6 class="section-subtitle text-muted">One theme that serves as an easy-to-use operational toolkit<br>that
-            meets customer's needs.</h6>
-        </div>
-        <div class="d-md-flex justify-content-between" *ngFor="let bn of frontBanner">
-          <div class="d-flex justify-content-start">
-            <div class="features-width ion-text-center">
-              <img [src]="bn.image" alt="" class="img-icons">
-              <h5 class="py-3">
-                {{ bn.title }}
-              </h5>
-              <p class="text-muted">
-                {{ bn.content }}
-              </p>
-              <a href="#">
-                <p class="readmore-link">Readmore</p>
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      <ion-grid>
-        <!-- <ion-row class="features-overview">
-          <ion-col size="4" *ngFor="let bn of frontBanner" class="features-overview">
-            <img [src]="bn.image" alt="">
+
+
+    <ion-row>
+      <ion-col size="12" size-md="4" size-lg="4" *ngFor="let bn of frontBanner">
+        <ion-card>
+          <ion-card-header>
+            <img [src]="bn.image" alt="" class="img-fluid">
+          </ion-card-header>
+          <ion-card-content>
             <h5 class="py-3">
               {{ bn.title }}
             </h5>
             <p class="text-muted">
               {{ bn.content }}
             </p>
-            <a href="#">
-              <p class="readmore-link">Readmore</p>
-            </a>
-          </ion-col>
-        </ion-row> -->
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
 
-        <ion-row>
-          <ion-col size="12" size-md="6" size-lg="6">
-            <ion-text>
-              <h1>Vehicles</h1>
-            </ion-text>
-            <swiper-container class="mySwiper" zoom="true" navigation="true" pagination="true"
-              pagination-clickable="true">
-              <swiper-slide *ngFor="let image of gallery">
-                <div class="swiper-zoom-container">
-                  <img src="{{ image }}" />
-                </div>
-              </swiper-slide>
-            </swiper-container>
-          </ion-col>
-          <ion-col size="12" size-md="6" size-lg="6">
-            <ion-text>
-              <h1>Signs</h1>
-            </ion-text>
-            <swiper-container class="mySwiper" zoom="true" navigation="true" pagination="true"
-              pagination-clickable="true">
-              <swiper-slide *ngFor="let image of gallery">
-                <div class="swiper-zoom-container">
-                  <img src="{{ image }}" />
-                </div>
-              </swiper-slide>
-            </swiper-container>
-          </ion-col>
-        </ion-row>
 
-        <ion-row class="ion-text-center">
-          <ion-col size="12">
-            <h5 class="pb-2">Get in Touch</h5>
-            <p class="text-muted">Don’t miss any updates of our new templates and extensions.!</p>
-          </ion-col>
-        </ion-row>
-
-        <ion-row class="address-row">
-          <ion-col size="6">
-            <form>
-              <input [(ngModel)]="subscribeEmail" [ngModelOptions]="{standalone: true}" type="text" class="form-control"
-                id="Email" placeholder="Email id">
-            </form>
-            <div class="pt-3">
-              <ion-button (click)="subscribe()" expand="block" fill="solid" shape="round">
-                Subscribe
-              </ion-button>
+    <ion-col size-sm="12" size-md="6" size-lg="6" class="ion-text-center">
+      <ion-text>
+        <h1>Signs</h1>
+      </ion-text>
+      <swiper-container class="mySwiper" zoom="true" navigation="true" pagination="true" pagination-clickable="true">
+        <swiper-slide *ngFor="let image of signsGallery; let i=index">
+          <div class="swiper-zoom-container">
+            <img [src]="image.thumb" (click)="openSignsGallery(i)" />
+          </div>
+        </swiper-slide>
+      </swiper-container>
+    </ion-col>
+    
+    <ion-row class="ion-justify-content-center">
+      <ion-col size-sm="12" size-md="6" size-lg="6" class="ion-text-center">
+        <ion-text>
+          <h1>Vehicles</h1>
+        </ion-text>
+        <swiper-container class="mySwiper" zoom="true" navigation="true" pagination="true" pagination-clickable="true">
+          <swiper-slide *ngFor="let image of vehiclesGallery; let i=index">
+            <div class="swiper-zoom-container">
+              <img [src]="image.thumb" (click)="openVehiclesGallery(i)" />
             </div>
-          </ion-col>
-          <ion-col size="6" class="ion-text-center">
-            <h5 class="pb-2">Our address</h5>
-            <p class="text-muted">518 Schmeler Neck<br>Bartlett. Illinois</p>
-            <div class="pt-2">
-              <p class="text-muted m-0">{{ 'mikayla_beer@feil.name' }}</p>
-              <p class="text-muted m-0">906-179-8309</p>
-            </div>
-          </ion-col>
-        </ion-row>
+          </swiper-slide>
+        </swiper-container>
+      </ion-col>
+    </ion-row>
 
-        <ion-row class="ion-text-center">
-          <ion-col size="4">
-            <ion-button fill="clear">
-              <ion-icon class="mdi mdi-facebook"></ion-icon>
-            </ion-button>
-          </ion-col>
-          <ion-col size="4">
-            <ion-button fill="clear">
-              <ion-icon class="mdi mdi-instagram"></ion-icon>
-            </ion-button>
-          </ion-col>
-          <ion-col size="4">
-            <ion-button fill="clear">
-              <ion-icon class="mdi mdi-linkedin"></ion-icon>
-            </ion-button>
-          </ion-col>
-        </ion-row>
+    <ion-row class="ion-text-center">
+      <ion-col size="12">
+        <h5 class="pb-2">Get in Touch</h5>
+        <p class="text-muted">Don’t miss any updates!</p>
+      </ion-col>
+    </ion-row>
 
-        <ion-row>
-          <ion-col size="12" class="border-top">
-            <p class="text-center text-muted">
-              Copyright © 2023
-              <br />
-              All rights reserved.
-            </p>
-          </ion-col>
-        </ion-row>
-        <ion-row class="ion-text-center terms-row">
-          <ion-col size="4">
-            <a>
-              Terms &
-              Conditions
-            </a>
-          </ion-col>
-          <ion-col size="4">
-            <a>
-              Privacy policy
-            </a>
-          </ion-col>
-          <ion-col size="4">
-            <a>
-              Cookie Policy
-            </a>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </div>
-  </div>
+    <ion-row class="address-row">
+      <ion-col size="6">
+        <form>
+          <input [(ngModel)]="subscribeEmail" [ngModelOptions]="{standalone: true}" type="text" class="form-control"
+            id="Email" placeholder="Email id">
+        </form>
+        <div class="pt-3">
+          <ion-button (click)="subscribe()" expand="block" fill="solid" shape="round">
+            Subscribe
+          </ion-button>
+        </div>
+      </ion-col>
+      <ion-col size="6" class="ion-text-center">
+        <p class="text-muted">
+          518 Schmeler Neck<br>
+          Fraserburgh - Scotland
+        </p>
+        <div class="pt-2">
+          <p class="text-muted m-0">{{ 'mikayla_beer@feil.name' }}</p>
+          <p class="text-muted m-0">906-179-8309</p>
+        </div>
+      </ion-col>
+    </ion-row>
 
+    <ion-row class="ion-text-center">
+      <ion-col size="4">
+        <ion-button fill="clear">
+          <ion-icon class="mdi mdi-facebook"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col size="4">
+        <ion-button fill="clear">
+          <ion-icon class="mdi mdi-instagram"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col size="4">
+        <ion-button fill="clear">
+          <ion-icon class="mdi mdi-linkedin"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
 
+    <ion-row class="ion-text-center terms-row">
+      <ion-col size="4">
+        <a>
+          Terms &
+          Conditions
+        </a>
+      </ion-col>
+      <ion-col size="4">
+        <a>
+          Privacy policy
+        </a>
+      </ion-col>
+      <ion-col size="4">
+        <a>
+          Cookie Policy
+        </a>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="text-muted ion-text-center copy-row">
+      <ion-col size="12" class="border-top">
+        Copyright © 2023 - All rights reserved.
+      </ion-col>
+      <ion-col size="12">
+        made with
+        <ion-icon color="danger" name="heart"></ion-icon>
+        in
+        <img class="scotland" src="../../assets/icon/scotland.png" />
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
   <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
     <ng-template>

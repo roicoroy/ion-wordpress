@@ -1,12 +1,14 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component, OnInit, ViewChild } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, Directive, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { jarallax } from "jarallax";
 import { IonModal } from '@ionic/angular';
+import { IonicSlides } from '@ionic/angular/standalone';
 import Swiper from 'swiper';
-import { register } from 'swiper/element/bundle';
-register();
+import { Navigation, Pagination } from 'swiper/modules';
+import { LightboxModule } from 'ngx-lightbox';
+import { Lightbox } from 'ngx-lightbox';
 
 declare let $: any;
 declare let AOS: any;
@@ -17,50 +19,180 @@ declare let AOS: any;
   styleUrls: ['./nd-graphics.page.scss'],
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  imports: [IonicModule, CommonModule, ReactiveFormsModule, FormsModule]
+  imports: [
+    IonicModule,
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    LightboxModule
+  ]
 })
 export class NdGraphicsPage implements OnInit {
 
   @ViewChild(IonModal) modal!: IonModal;
 
+  swiperModules = [IonicSlides];
+
+  @ViewChild('swiper') swiperRef: ElementRef | undefined;
+
+  swiper?: Swiper;
+
   message = 'This modal example uses triggers to automatically open a modal when the button is clicked.';
+
   name!: string;
 
   subscribeEmail: string = 'test@email.com';
 
-  gallery = [
-    'assets/galeria/2.png',
-    'assets/galeria/4.png',
-    'assets/galeria/6.png',
+  vehiclesGallery: any = [
+    {
+      src: 'assets/banners/car-1.png',
+      thumb: 'assets/banners/car-1.png'
+    },
+    {
+      src: 'assets/banners/car-2.png',
+      thumb: 'assets/banners/car-2.png',
+    },
+    {
+      src: 'assets/banners/car-3.png',
+      thumb: 'assets/banners/car-3.png'
+    },
   ];
-  
+
+  signsGallery: any = [
+    {
+      src: 'assets/banners/sign-1.png',
+      thumb: 'assets/banners/sign-1.png'
+    },
+    {
+      src: 'assets/banners/sign-2.png',
+      thumb: 'assets/banners/sign-2.png',
+    },
+    {
+      src: 'assets/banners/sign-3.png',
+      thumb: 'assets/banners/sign-3.png'
+    },
+  ];
+
   frontBanner = [
     {
-      title:'Speed Optimisation',
-      content:'Lorem ipsum dolor sit amet, tincidunt vestibulum. Fusce egeabus consectetuer turpis, suspendisse.',
-      image:'../../assets/banners/cleaning.png'
+      title: 'Business',
+      content: 'Lorem ipsum dolor sit amet, tincidunt vestibulum. Fusce egeabus consectetuer turpis, suspendisse.',
+      image: 'assets/banners/kebab-banner.png'
     },
     {
-      title:'Speed Optimisation',
-      content:'Lorem ipsum dolor sit amet, tincidunt vestibulum. Fusce egeabus consectetuer turpis, suspendisse.',
-      image:'../../assets/banners/bebidas.png'
+      title: 'Vehicles',
+      content: 'Lorem ipsum dolor sit amet, tincidunt vestibulum. Fusce egeabus consectetuer turpis, suspendisse.',
+      image: 'assets/banners/van.png'
     },
     {
-      title:'Speed Optimisation',
-      content:'Lorem ipsum dolor sit amet, tincidunt vestibulum. Fusce egeabus consectetuer turpis, suspendisse.',
-      image:'../../assets/banners/acougue.png'
+      title: 'Wall Decoration',
+      content: 'Lorem ipsum dolor sit amet, tincidunt vestibulum. Fusce egeab...',
+      image: 'assets/banners/kebab-banner1.png'
     },
   ];
 
-  constructor() { }
+  testimonials = [
+    {
+      name: 'Laura Doe',
+      content: 'Lorem ipsum dolor sit amet, tincidunt vestibulum. Fusce egeabus consectetuer turpis, suspendisse.',
+      thumb: 'assets/nd-graphics-landing-page/images/face1.jpg',
+      job: 'Marketing Manager on Gray Adamns, Fraserburgh'
+    },
+    {
+      name: 'Mohamed Doe',
+      content: 'Lorem ipsum dolor sit amet, tincidunt vestibulum. Fusce egeabus consectetuer turpis, suspendisse.',
+      thumb: 'assets/nd-graphics-landing-page/images/face2.jpg',
+      job: 'Kebab Shop owner, Aberdden'
+    },
+    {
+      name: 'Tim Doe',
+      content: 'Lorem ipsum dolor sit amet, tincidunt vestibulum. Fusce egeabus consectetuer turpis, suspendisse.',
+      thumb: 'assets/nd-graphics-landing-page/images/face3.jpg',
+      job: 'Football stadium manger, Fraserburgh'
+    },
+  ];
 
-  // async statusHide() {
-  //   return await showStatusBar();
-  // }
 
-  // async statusShow() {
-  //   return await showStatusBar();
-  // }
+  constructor(
+    private elRef: ElementRef,
+    private _lightbox: Lightbox
+  ) { }
+
+  openVehiclesGallery(index: number): void {
+    this._lightbox.open(this.vehiclesGallery, index);
+  }
+  
+  openSignsGallery(index: number): void {
+    this._lightbox.open(this.vehiclesGallery, index);
+  }
+
+  close(): void {
+    this._lightbox.close();
+  }
+
+  ngOnInit() {
+
+  }
+
+  ionViewWillLeave() {
+
+  }
+
+  ionViewDidEnter() {
+
+    this.swiperInit();
+
+    jarallax(document.querySelectorAll('.jarallax'), {
+      containerClass: 'jarallax-image-local',
+      imgSrc: 'assets/logo/eye-full.jpeg',
+      imgRepeat: 'no-repeat',
+    });
+
+    jarallax(document.querySelectorAll('.jarallax-img'), {
+
+    });
+  }
+
+  openImage(image: string) {
+    console.log(image);
+  }
+
+  goNext() {
+    this.swiper?.slideNext();
+  }
+
+  goPrev() {
+    this.swiper?.slidePrev();
+  }
+
+  async swiperInit() {
+    const initSwipe = () => {
+    }
+
+    this.swiper = new Swiper(".photoSwiper", {
+      modules: [Navigation, Pagination],
+      navigation: {
+        enabled: false,
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+        dynamicBullets: true,
+        type: 'bullets',
+        renderProgressbar: function (progressbarFillClass) {
+          return '<span class="' + progressbarFillClass + '"></span>';
+        }
+      },
+      on: {
+        init() {
+          initSwipe();
+        },
+      },
+    });
+    this.swiper.init();
+  }
 
   cancel() {
     this.modal.dismiss(null, 'cancel');
@@ -82,70 +214,7 @@ export class NdGraphicsPage implements OnInit {
     }
   }
 
-  async swiperInit() {
-    const swiper = await new Swiper(".mySwiper", {
-      zoom: true,
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-      },
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-      },
-    });
+  swiperSlideChanged(e?: any) {
+    console.log('changed: ', e);
   }
-
-  ionViewDidEnter() {
-
-    this.swiperInit();
-
-    jarallax(document.querySelectorAll('.jarallax'), {
-      containerClass: 'jarallax-image',
-      imgSrc: '../../assets/logo/logo-para.png',
-      imgRepeat: 'no-repeat',
-    });
-
-    jarallax(document.querySelectorAll('.jarallax-img'), {
-
-    });
-
-    // OWL-CAROUSAL
-    $('.owl-carousel').owlCarousel({
-      items: 3,
-      loop: true,
-      nav: false,
-      dot: true,
-      autoplay: true,
-      slideTransition: 'linear',
-      autoplayHoverPause: true,
-      responsive: {
-        0: {
-          items: 1
-        },
-        600: {
-          items: 2
-        },
-        1000: {
-          items: 3
-        }
-      }
-    });
-
-    // AOS
-    AOS.init({
-      offset: 120,
-      delay: 0,
-      duration: 1200,
-      easing: 'ease',
-      once: true,
-      mirror: false,
-      anchorPlacement: 'top-bottom',
-      disable: "mobile"
-    });
-  }
-
-  ngOnInit() {
-  }
-
 }

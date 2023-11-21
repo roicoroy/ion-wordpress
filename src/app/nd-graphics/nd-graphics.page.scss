@@ -11,11 +11,6 @@ ion-toolbar.top-toolbar {
     }
 }
 
-swiper-container {
-    --swiper-navigation-color: var(--ion-color-warning);
-    --swiper-pagination-color: var(--ion-color-warning);
-}
-
 .image {
     height: 35vh;
     background-size: cover;
@@ -24,8 +19,6 @@ swiper-container {
 
 ion-toolbar.header-toolbar {
     height: 100%;
-
-    .header-logo-condense {}
 }
 
 
@@ -37,8 +30,79 @@ ion-row.address-row {
 .terms-row {
     a {
         color: inherit;
-        font-size: 0.6rem;
-        
-    }
+        font-size: 0.8rem;
 
+    }
+}
+
+ion-row.copy-row {
+    font-size: 0.6rem;
+}
+
+.scotland {
+    margin: 0;
+    padding: 0;
+    height: 1.5rem;
+}
+
+.banner {
+    background-color: transparent;
+    position: relative;
+    margin-top: -10vh;
+    margin-left: 10vw;
+    margin-right: 10vw;
+    z-index: 9;
+}
+
+ion-card.banner-card {
+    background-color: rgba(203, 202, 204, 0.5);
+
+    ion-card-content {
+        // background-color: var(--ion-color-medium);
+    }
+}
+
+/*==================================
+             SWIPER
+===================================*/
+/* remove bullet and space from the list */
+ul.swiper-wrapper {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Swiper styles */
+.swiper-container {
+    max-width: 100%;
+}
+
+/* responive image */
+.swiper-container img {
+    width: 100%;
+    height: auto;
+}
+
+.swiper-slide {
+    text-align: center;
+
+    /* Remove this if you want 1 slide perview - than change slidesPerView js-option to 1 -or- 2+ instead of 'auto' */
+    width: 80%;
+}
+
+/* Swiper custom pagination */
+.swiper-pagination-bullet {
+    width: 34px;
+    height: 34px;
+    text-align: center;
+    line-height: 34px;
+    font-size: 14px;
+    color: #000;
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.swiper-pagination-bullet-active {
+    color: #fff;
+    background: black;
 }

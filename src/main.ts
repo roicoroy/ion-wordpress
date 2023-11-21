@@ -19,6 +19,10 @@ import { NgxsFormPluginModule } from '@ngxs/form-plugin';
 import { ProductsState } from './app/store/products/products.state';
 import { fadeOutAnimation } from './app/shared/animations/nav-animation';
 
+
+import { register } from 'swiper/element/bundle';
+register();
+
 if (environment.production) {
   enableProdMode();
 }
