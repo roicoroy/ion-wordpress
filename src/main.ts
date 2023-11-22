@@ -37,7 +37,7 @@ bootstrapApplication(AppComponent, {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular({
       mode: 'ios',
-      navAnimation: fadeOutAnimation
+      // navAnimation: fadeOutAnimation
     }),
     importProvidersFrom(BrowserAnimationsModule),
     importProvidersFrom(HttpClientModule),

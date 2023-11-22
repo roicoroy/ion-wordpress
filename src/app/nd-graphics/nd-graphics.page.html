@@ -4,12 +4,15 @@
       <ion-icon class="top-logo-icon" src="assets/logo/Nd-graphics-logo.svg"></ion-icon>
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button color="dark" fill="outline" shape="round">
+      <ion-button color="secondary" fill="outline" shape="round">
         <ion-icon name="call"></ion-icon>
       </ion-button>
-      <ion-button color="dark" id="open-modal" fill="outline" shape="round">
+      <ion-button color="secondary" id="open-modal" fill="outline" shape="round">
         <ion-icon name="mail"></ion-icon>
       </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-menu-button color="secondary"></ion-menu-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -24,7 +27,11 @@
   <div class="banner">
     <ion-card class="banner-card">
       <ion-card-header>
-        <ion-card-title class="chalkduster-font">Welcome to</ion-card-title>
+        <ion-card-title class="chalkduster-font">
+          <ion-text color="secondary">
+            Welcome to
+          </ion-text>
+        </ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <img src="assets/logo/logo.png">
@@ -33,9 +40,6 @@
   </div>
 
   <ion-grid>
-
-
-
 
     <ion-row>
       <ion-col size="12" size-md="4" size-lg="4" *ngFor="let bn of frontBanner">
@@ -68,7 +72,7 @@
         </swiper-slide>
       </swiper-container>
     </ion-col>
-    
+
     <ion-row class="ion-justify-content-center">
       <ion-col size-sm="12" size-md="6" size-lg="6" class="ion-text-center">
         <ion-text>
@@ -88,6 +92,24 @@
       <ion-col size="12">
         <h5 class="pb-2">Get in Touch</h5>
         <p class="text-muted">Don’t miss any updates!</p>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-text-center icons-row">
+      <ion-col size="4">
+        <ion-button fill="clear" fill="outline">
+          <ion-icon class="mdi mdi-facebook"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col size="4">
+        <ion-button fill="clear" fill="outline">
+          <ion-icon class="mdi mdi-instagram"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col size="4">
+        <ion-button fill="clear" fill="outline">
+          <ion-icon class="mdi mdi-linkedin"></ion-icon>
+        </ion-button>
       </ion-col>
     </ion-row>
 
@@ -115,25 +137,7 @@
       </ion-col>
     </ion-row>
 
-    <ion-row class="ion-text-center">
-      <ion-col size="4">
-        <ion-button fill="clear">
-          <ion-icon class="mdi mdi-facebook"></ion-icon>
-        </ion-button>
-      </ion-col>
-      <ion-col size="4">
-        <ion-button fill="clear">
-          <ion-icon class="mdi mdi-instagram"></ion-icon>
-        </ion-button>
-      </ion-col>
-      <ion-col size="4">
-        <ion-button fill="clear">
-          <ion-icon class="mdi mdi-linkedin"></ion-icon>
-        </ion-button>
-      </ion-col>
-    </ion-row>
-
-    <ion-row class="ion-text-center terms-row">
+    <!-- <ion-row class="ion-text-center terms-row">
       <ion-col size="4">
         <a>
           Terms &
@@ -150,7 +154,7 @@
           Cookie Policy
         </a>
       </ion-col>
-    </ion-row>
+    </ion-row> -->
 
     <ion-row class="text-muted ion-text-center copy-row">
       <ion-col size="12" class="border-top">
@@ -160,10 +164,16 @@
         made with
         <ion-icon color="danger" name="heart"></ion-icon>
         in
-        <img class="scotland" src="../../assets/icon/scotland.png" />
+        <img class="scotland" src="assets/icon/scotland.png" />
       </ion-col>
     </ion-row>
   </ion-grid>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="shareLink(shareInfo)" color="secondary">
+      <ion-icon name="share"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 
   <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
     <ng-template>
@@ -173,9 +183,6 @@
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding">
-        <div class="modal-header">
-          <h4 class="modal-title" id="exampleModalLabel">Contact Us</h4>
-        </div>
         <div class="modal-body">
           <form>
             <div class="form-group">
@@ -193,8 +200,12 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-light" (click)="cancel()">Close</button>
-          <button type="button" class="btn btn-success" (click)="confirm()">Submit</button>
+          <ion-button (click)="cancel()" expand="block" fill="outline" shape="round" color="secondary">
+            Cancel
+          </ion-button>
+          <ion-button (click)="confirm()" expand="block" fill="outline" shape="round" color="primary">
+            Submit
+          </ion-button>
         </div>
       </ion-content>
     </ng-template>

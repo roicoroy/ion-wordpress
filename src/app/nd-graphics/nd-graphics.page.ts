@@ -9,6 +9,7 @@ import Swiper from 'swiper';
 import { Navigation, Pagination } from 'swiper/modules';
 import { LightboxModule } from 'ngx-lightbox';
 import { Lightbox } from 'ngx-lightbox';
+import { ShareService } from '../shared/utils/share.service';
 
 declare let $: any;
 declare let AOS: any;
@@ -77,12 +78,12 @@ export class NdGraphicsPage implements OnInit {
     {
       title: 'Business',
       content: 'Lorem ipsum dolor sit amet, tincidunt vestibulum. Fusce egeabus consectetuer turpis, suspendisse.',
-      image: 'assets/banners/kebab-banner.png'
+      image: 'assets/banners/van.png'
     },
     {
       title: 'Vehicles',
       content: 'Lorem ipsum dolor sit amet, tincidunt vestibulum. Fusce egeabus consectetuer turpis, suspendisse.',
-      image: 'assets/banners/van.png'
+      image: 'assets/banners/kebab-banner.png'
     },
     {
       title: 'Wall Decoration',
@@ -112,8 +113,15 @@ export class NdGraphicsPage implements OnInit {
     },
   ];
 
+  shareInfo = {
+    header: 'Hello friend',
+    message: 'Look at my shop, please :)',
+    link: 'https://fae.zra.mybluehost.me/public',
+  }
+
 
   constructor(
+    private share: ShareService,
     private elRef: ElementRef,
     private _lightbox: Lightbox
   ) { }
@@ -121,7 +129,7 @@ export class NdGraphicsPage implements OnInit {
   openVehiclesGallery(index: number): void {
     this._lightbox.open(this.vehiclesGallery, index);
   }
-  
+
   openSignsGallery(index: number): void {
     this._lightbox.open(this.vehiclesGallery, index);
   }
@@ -144,7 +152,7 @@ export class NdGraphicsPage implements OnInit {
 
     jarallax(document.querySelectorAll('.jarallax'), {
       containerClass: 'jarallax-image-local',
-      imgSrc: 'assets/logo/eye-full.jpeg',
+      imgSrc: 'assets/logo/logo-para2.jpeg',
       imgRepeat: 'no-repeat',
     });
 
@@ -216,5 +224,13 @@ export class NdGraphicsPage implements OnInit {
 
   swiperSlideChanged(e?: any) {
     console.log('changed: ', e);
+  }
+
+  shareLink(shareInfo: any) {
+    this.share.share(
+      shareInfo.header,
+      shareInfo.messaage,
+      shareInfo.link,
+    )
   }
 }

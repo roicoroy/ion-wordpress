@@ -12,6 +12,8 @@
     "lint": "ng lint",
     "open-ios": "ionic build && npx cap sync && npx cap open ios",
     "android": "ionic build && npx cap sync && npx cap open android",
+    "ios-live-load": "ionic capacitor run ios -l --external",
+    "android-live-load": "ionic capacitor run android -l --external",
     "deploy-apache-local": "npm run build && cp -r /Users/ricardobento/Documents/AMIGAO-WORDPRESS/ion-wordpress/www/* /Applications/MAMP/htdocs/public",
     "corodva-res": "cordova-res --skip-config --copy",
     "build-android-signed": "npx cap build android  --keystorepath '/Users/ricardobento/Documents/AMIGAO-WORDPRESS/ion-wordpress/ion-wordpress.keystore' --keystorepass Rwbento123!   --keystorealias alias   --keystorealiaspass Rwbento123! --androidreleasetype APK --signing-type apksigner",

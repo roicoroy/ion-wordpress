@@ -4,23 +4,17 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Store } from '@ngxs/store';
 import { Observable, Subject, takeUntil } from 'rxjs';
-import { ProductsActions } from '../store/products/products.actions';
-import { IHomeListModel, WooProductsFacade } from './woo-products.facade';
-import { WooProductsComponent } from '../components/woo-products/woo-products.component';
+import { ProductsActions } from 'src/app/store/products/products.actions';
+import { IHomeListModel, ProductsListFacade } from './products-list.facade';
 
 @Component({
-  selector: 'app-woo-products',
-  templateUrl: './woo-products.page.html',
-  styleUrls: ['./woo-products.page.scss'],
+  selector: 'app-product-list',
+  templateUrl: './product-list.page.html',
+  styleUrls: ['./product-list.page.scss'],
   standalone: true,
-  imports: [
-    IonicModule,
-    CommonModule,
-    FormsModule,
-    WooProductsComponent,
-  ]
+  imports: [IonicModule, CommonModule, FormsModule]
 })
-export class WooProductsPage implements OnInit, OnDestroy {
+export class ProductListPage implements OnInit, OnDestroy {
 
   btnSelected: boolean | null = null;
 
@@ -31,7 +25,7 @@ export class WooProductsPage implements OnInit, OnDestroy {
   productsList: any;
 
   constructor(
-    private facade: WooProductsFacade,
+    private facade: ProductsListFacade,
     private store: Store,
   ) {
     this.viewState$ = this.facade.viewState$;
