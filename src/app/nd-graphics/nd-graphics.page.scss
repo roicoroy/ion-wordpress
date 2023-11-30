@@ -1,3 +1,7 @@
+// .jarallax-image-local{
+//     width: 500px;
+//     height: 350px;
+// }
 ion-toolbar.top-toolbar {
     display: flex;
     align-items: center;
@@ -11,7 +15,7 @@ ion-toolbar.top-toolbar {
 }
 
 .image {
-    height: 35vh;
+    height: 55vh;
     background-size: cover;
     background-position: 50% 50%;
 }
@@ -19,7 +23,6 @@ ion-toolbar.top-toolbar {
 ion-toolbar.header-toolbar {
     height: 100%;
 }
-
 
 ion-row.address-row {
     display: flex;
@@ -45,13 +48,13 @@ ion-row.copy-row {
 .scotland {
     margin: 0;
     padding: 0;
-    height: 1.5rem;
+    height: 1.2rem;
 }
 
 .banner {
     background-color: transparent;
     position: relative;
-    margin-top: 0vh;
+    margin-top: -0vh;
     margin-left: 10vw;
     margin-right: 10vw;
     z-index: 9;
@@ -60,52 +63,8 @@ ion-row.copy-row {
 ion-card.banner-card {
     background-color: rgba(203, 202, 204, 0.5);
     height: 30vh;
+
     ion-card-content {
         // background-color: var(--ion-color-medium);
     }
-}
-
-/*==================================
-             SWIPER
-===================================*/
-/* remove bullet and space from the list */
-ul.swiper-wrapper {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-}
-
-/* Swiper styles */
-.swiper-container {
-    max-width: 100%;
-}
-
-/* responive image */
-.swiper-container img {
-    width: 100%;
-    height: auto;
-}
-
-.swiper-slide {
-    text-align: center;
-
-    /* Remove this if you want 1 slide perview - than change slidesPerView js-option to 1 -or- 2+ instead of 'auto' */
-    width: 80%;
-}
-
-/* Swiper custom pagination */
-.swiper-pagination-bullet {
-    width: 34px;
-    height: 34px;
-    text-align: center;
-    line-height: 34px;
-    font-size: 14px;
-    color: #000;
-    opacity: 1;
-    background: rgba(0, 0, 0, 0.3);
-}
-
-.swiper-pagination-bullet-active {
-    color: #fff;
-    background: black;
 }

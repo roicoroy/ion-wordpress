@@ -40,13 +40,10 @@ export class ProductsState {
             .pipe(
                 tap((response: Product[] | any) => {
                     console.log(response);
-                    let array = [];
-                    array.push(response?.products);
-                    
-                    // console.log(array);
+                    console.log(response.products);
     
                     ctx.patchState({
-                        products: array[0],
+                        products: response.products,
                     });
                 }),
                 catchError(e => {

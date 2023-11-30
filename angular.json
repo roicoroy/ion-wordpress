@@ -35,6 +35,7 @@
               "src/theme/variables.scss",
               "src/global.scss",
               "src/assets/driver.css",
+              "src/assets/photoswipe.css",
               "node_modules/ngx-lightbox/lightbox.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "@fancyapps/ui/dist/fancybox/fancybox.css",

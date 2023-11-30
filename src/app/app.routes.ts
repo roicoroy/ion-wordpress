@@ -14,26 +14,30 @@ export const routes: Routes = [
   },
   {
     path: 'home',
-    loadComponent: () => import('./home/home.page').then( m => m.HomePage)
+    loadComponent: () =>
+      import('./home/home.page').then(m => m.HomePage)
   },
   {
     path: 'nd-graphics',
-    loadComponent: () => import('./nd-graphics/nd-graphics.page').then( m => m.NdGraphicsPage)
-  },
-  {
-    path: 'woo-products',
-    loadComponent: () => import('./woo-products/woo-products.page').then( m => m.WooProductsPage)
-  },
-  {
-    path: 'nd-graphics',
-    loadComponent: () => import('./nd-graphics/nd-graphics.page').then( m => m.NdGraphicsPage)
-  },
-  {
-    path: 'product-details',
-    loadComponent: () => import('./woo/product-details/product-details.page').then( m => m.ProductDetailsPage)
+    loadComponent: () =>
+      import('./nd-graphics/nd-graphics.page').then(m => m.NdGraphicsPage)
   },
   {
     path: 'product-list',
-    loadComponent: () => import('./woo/product-list/product-list.page').then( m => m.ProductListPage)
+    loadComponent: () =>
+      import('./woo/product-list/product-list.page').then(m => m.ProductListPage)
+  },
+  {
+    path: 'product-details/:id',
+    loadComponent: () =>
+      import('./woo/product-details/product-details.page').then(m => m.ProductDetailsPage)
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./woo/auth/login/login.page').then( m => m.LoginPage)
+  },
+  {
+    path: 'register',
+    loadComponent: () => import('./woo/auth/register/register.page').then( m => m.RegisterPage)
   },
 ];

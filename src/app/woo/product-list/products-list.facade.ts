@@ -25,7 +25,7 @@ export class ProductsListFacade {
             ]
         ).pipe(
             map((products) => ({
-                products
+                products: products[0],
             }))
         );
     }

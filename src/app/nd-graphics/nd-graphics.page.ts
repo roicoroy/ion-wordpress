@@ -119,7 +119,6 @@ export class NdGraphicsPage implements OnInit {
     link: 'https://fae.zra.mybluehost.me/public',
   }
 
-
   constructor(
     private share: ShareService,
     private elRef: ElementRef,
@@ -152,7 +151,7 @@ export class NdGraphicsPage implements OnInit {
 
     jarallax(document.querySelectorAll('.jarallax'), {
       containerClass: 'jarallax-image-local',
-      imgSrc: 'assets/logo/logo-para2.jpeg',
+      imgSrc: 'assets/logo/eye-full.jpeg',
       imgRepeat: 'no-repeat',
     });
 

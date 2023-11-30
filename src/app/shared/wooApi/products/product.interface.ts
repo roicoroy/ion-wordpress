@@ -63,7 +63,7 @@ export interface Product {
   grouped_products?: Array<string>;
   menu_order?: number;
   meta_data?: Array<any>;
-  images: Images[];
+  images?: Images[];
 }
 
 export interface  Category {
