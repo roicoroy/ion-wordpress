@@ -33,7 +33,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.store.dispatch(new ProductsActions.GetProducts());
+    // this.store.dispatch(new ProductsActions.GetProducts());
     addIcons({
       homeSharp,
       home,

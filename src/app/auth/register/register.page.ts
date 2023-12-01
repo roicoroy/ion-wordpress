@@ -94,19 +94,4 @@ export class RegisterPage implements OnInit {
     // this.router.navigate(['app/categories']);
   }
 
-  doFacebookSignup(): void {
-    console.log('facebook signup');
-    this.router.navigate(['app/categories']);
-  }
-
-  doGoogleSignup(): void {
-    console.log('google signup');
-    this.router.navigate(['app/categories']);
-  }
-
-  doTwitterSignup(): void {
-    console.log('twitter signup');
-    this.router.navigate(['app/categories']);
-  }
-
 }

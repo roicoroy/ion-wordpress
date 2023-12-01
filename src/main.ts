@@ -19,6 +19,8 @@ import { NgxsFormPluginModule } from '@ngxs/form-plugin';
 import { ProductsState } from './app/store/products/products.state';
 import { fadeOutAnimation } from './app/shared/animations/nav-animation';
 import { register } from 'swiper/element/bundle';
+import { AuthState } from './app/store/auth/auth.state';
+import { CustomerState } from './app/store/customer/customer.state';
 register();
 
 if (environment.production) {
@@ -40,7 +42,9 @@ bootstrapApplication(AppComponent, {
     importProvidersFrom(BrowserAnimationsModule),
     importProvidersFrom(HttpClientModule),
     importProvidersFrom(NgxsModule.forRoot([
-      ProductsState
+      AuthState,
+      CustomerState,
+      ProductsState,
     ], {
       developmentMode: false,
     })),
@@ -50,6 +54,8 @@ bootstrapApplication(AppComponent, {
     })),
     importProvidersFrom(NgxsStoragePluginModule.forRoot({
       key: [
+        'auth',
+        'customer',
         'products'
       ]
     })),

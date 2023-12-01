@@ -1,7 +1,7 @@
 import { Product } from '../../shared/wooApi/products/product.interface';
 
 export namespace ProductsActions {
-    export class GetProducts {
+    export class RetrieveProducts {
         static readonly type = '[Products] Get Products';
     }
     export class SetSelectedProducts {

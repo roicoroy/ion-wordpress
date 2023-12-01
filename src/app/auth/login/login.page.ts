@@ -67,19 +67,5 @@ export class LoginPage implements OnInit {
     console.log('redirect to forgot-password page');
   }
 
-  doFacebookLogin(): void {
-    console.log('facebook login');
-    // this.router.navigate(['app/categories']);
-  }
-
-  doGoogleLogin(): void {
-    console.log('google login');
-    // this.router.navigate(['app/categories']);
-  }
-
-  doTwitterLogin(): void {
-    console.log('twitter login');
-    // this.router.navigate(['app/categories']);
-  }
 
 }

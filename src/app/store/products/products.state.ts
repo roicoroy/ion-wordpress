@@ -9,13 +9,12 @@ import { Product } from '../../shared/wooApi/products/product.interface';
 export interface IProductsStateModel {
     products?: Product[] | any;
     selectedProduct?: Product | null;
-    isLoading?: boolean;
 }
 
 @State<IProductsStateModel>({
     name: 'products',
     defaults: {
-        isLoading: false,
+        products: null
     },
 })
 @Injectable({
@@ -27,35 +26,27 @@ export class ProductsState {
         private wooProducts: WoocommerceProductsService
     ) { }
 
-    // Defines a new selector for the error field
     @Selector()
     static getProducts(state: IProductsStateModel): Product[] {
         return state.products;
     }
 
-    // Triggers the PinTask action, similar to redux
-    @Action(ProductsActions.GetProducts)
-    getProducts(ctx: StateContext<IProductsStateModel>) {
+    @Action(ProductsActions.RetrieveProducts)
+    retrieveProducts(ctx: StateContext<IProductsStateModel>) {
         this.wooProducts.retrieveProducts()
             .pipe(
                 tap((response: Product[] | any) => {
-                    console.log(response);
-                    console.log(response.products);
-    
+                    // console.log(response);
+                    // console.log(response.products);
                     ctx.patchState({
                         products: response.products,
                     });
                 }),
                 catchError(e => {
-                    ctx.patchState({
-                        isLoading: false
-                    });
                     return new Observable(obs => obs.error(e));
                 })
             )
             .subscribe((response) => {
-                
-               
             });
     }
 
@@ -65,6 +56,7 @@ export class ProductsState {
             selectedProduct: payload
         });
     }
+
     @Action(ProductsActions.RemoveSelectedProducts)
     removeSelectedResult(ctx: StateContext<IProductsStateModel>) {
         ctx.patchState({

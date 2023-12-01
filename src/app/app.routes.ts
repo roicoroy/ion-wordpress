@@ -34,10 +34,10 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    loadComponent: () => import('./woo/auth/login/login.page').then( m => m.LoginPage)
+    loadComponent: () => import('./auth/login/login.page').then( m => m.LoginPage)
   },
   {
     path: 'register',
-    loadComponent: () => import('./woo/auth/register/register.page').then( m => m.RegisterPage)
+    loadComponent: () => import('./auth/register/register.page').then( m => m.RegisterPage)
   },
 ];
