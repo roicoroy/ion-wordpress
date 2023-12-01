@@ -34,6 +34,9 @@ export class RegisterPage implements OnInit {
       { type: 'required', message: 'Email is required.' },
       { type: 'pattern', message: 'Enter a valid email.' }
     ],
+    'username': [
+      { type: 'required', message: 'Email is required.' },
+    ],
     'password': [
       { type: 'required', message: 'Password is required.' },
       { type: 'minlength', message: 'Password must be at least 5 characters long.' }
@@ -65,6 +68,9 @@ export class RegisterPage implements OnInit {
       'email': new FormControl('test@email.com', Validators.compose([
         Validators.required,
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
+      ])),
+      'username': new FormControl('test', Validators.compose([
+        Validators.required
       ])),
       'matching_passwords': this.matching_passwords_group
     });

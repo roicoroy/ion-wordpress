@@ -61,8 +61,11 @@ export class AuthState {
         console.log(username);
     }
 
+    /* 
+     * Login
+    */
     @Action(AuthActions.GetAuthToken)
-    GetAuthToken(ctx: StateContext<IAuthStateModel>, { payload }: AuthActions.GetAuthToken) {
+    getAuthToken(ctx: StateContext<IAuthStateModel>, { payload }: AuthActions.GetAuthToken) {
         console.log(payload);
         this.wooApi.getAuthToken(payload)
             .pipe(
