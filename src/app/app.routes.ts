@@ -25,12 +25,12 @@ export const routes: Routes = [
   {
     path: 'product-list',
     loadComponent: () =>
-      import('./woo/product-list/product-list.page').then(m => m.ProductListPage)
+      import('./shop/product-list/product-list.page').then(m => m.ProductListPage)
   },
   {
     path: 'product-details/:id',
     loadComponent: () =>
-      import('./woo/product-details/product-details.page').then(m => m.ProductDetailsPage)
+      import('./shop/product-details/product-details.page').then(m => m.ProductDetailsPage)
   },
   {
     path: 'login',
