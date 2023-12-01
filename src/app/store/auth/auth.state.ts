@@ -53,14 +53,6 @@ export class AuthState {
             )
             .subscribe((res: CreateNonceRes) => {
                 console.log(res);
-                // ctx.patchState({
-                //     user: {
-                //         token: user?.token,
-                //         user_display_name: user?.user_display_name,
-                //         user_email: user?.user_email,
-                //         user_nicename: user?.user_nicename,
-                //     },
-                // });
             });
     }
 

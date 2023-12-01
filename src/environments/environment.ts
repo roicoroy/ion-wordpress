@@ -11,6 +11,10 @@ export const environment = {
   woocommerce: {
     consumer_key: "ck_9d03eb62b6399886342fe629ce39a162593d74c7",
     consumer_secret: "cs_f420b92d90138bfa9f2ef6c5e9dcf8dcae386b3b"
+  },
+  wordpress: {
+    api_url: 'https://fae.zra.mybluehost.me/wp-json/wp/v2/',
+    auth_url: 'https://fae.zra.mybluehost.me/wp-json/jwt-auth/v1/token'
   }
 };
 

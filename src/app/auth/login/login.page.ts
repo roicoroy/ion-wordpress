@@ -5,6 +5,9 @@ import { IonicModule } from '@ionic/angular';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { IonMenu, IonContent, IonList, IonListHeader, IonNote, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterOutlet, MenuController, IonButton } from '@ionic/angular/standalone';
 import { ShowHidePasswordComponent } from 'src/app/components/show-hide-password/show-hide-password.component';
+import { Store } from '@ngxs/store';
+import { IStoreSnapshoModel } from 'src/app/store/store.snapshot.interface';
+import { IAuthStateModel } from 'src/app/store/auth/auth.state';
 
 @Component({
   selector: 'app-login',
@@ -38,6 +41,8 @@ export class LoginPage implements OnInit {
   };
 
   private menu = inject(MenuController);
+  
+  private store = inject(Store);
 
   constructor(
     public router: Router,
@@ -60,7 +65,9 @@ export class LoginPage implements OnInit {
 
   doLogin(): void {
     console.log('do Log In');
-    this.router.navigate(['/product-lis']);
+    const token = this.store.selectSnapshot((state: IStoreSnapshoModel) => state.auth.user.token);
+    console.log(token);
+    // this.router.navigate(['/product-list']);
   }
 
   goToForgotPassword(): void {
