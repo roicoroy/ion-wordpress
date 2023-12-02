@@ -28,11 +28,11 @@ if (environment.production) {
 
 bootstrapApplication(AppComponent, {
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: WooInterceptor,
-      multi: true
-    },
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: WooInterceptor,
+    //   multi: true
+    // },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular({
       mode: 'ios',

@@ -12,16 +12,25 @@ import { ProductsActions } from './store/products/products.actions';
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, CommonModule, IonApp, IonSplitPane, IonMenu, IonContent, IonList, IonListHeader, IonNote, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterOutlet],
+  imports: [
+    RouterLink,
+    RouterLinkActive, 
+    CommonModule, 
+    IonApp, 
+    IonSplitPane, 
+    IonMenu, 
+    IonContent, 
+    IonList, 
+    IonListHeader, IonNote, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterOutlet],
 })
 export class AppComponent implements OnInit {
   public appPages = [
     { title: 'Nd Graphics', url: '/nd-graphics', icon: 'eye' },
-    // { title: 'Home', url: '/home', icon: 'home' },
+    { title: 'Home', url: '/home', icon: 'home' },
     { title: 'Woo', url: '/product-list', icon: 'storefront' },
     { title: 'Login', url: '/login', icon: 'paper-plane' },
     { title: 'Register', url: '/register', icon: 'heart' },
-    // { title: 'Archived', url: '/folder/archived', icon: 'archive' },
+    { title: 'Blog', url: '/posts', icon: 'archive' },
     // { title: 'Trash', url: '/folder/trash', icon: 'trash' },
     // { title: 'Spam', url: '/folder/spam', icon: 'warning' },
   ];

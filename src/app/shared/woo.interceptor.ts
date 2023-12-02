@@ -38,6 +38,12 @@ export class WooInterceptor implements HttpInterceptor {
         // const auth = this.injector.get(AuthService);
         let requestUrl = '';
         console.log(request.url);
+        const skipUrl = 'https://fae.zra.mybluehost.me/wp-json/wp/v2/posts?page=1&orderby=modified';
+        if (request.url === skipUrl) {
+            // requestUrl = `${environment.origin}/${request.url}`;
+            // requestUrl = skipUrl;
+            requestUrl = request.url;
+        }
         if (request.url.includes('api') || request.url.includes('jwt')) {
             requestUrl = `${environment.origin}/${request.url}`;
         } else {

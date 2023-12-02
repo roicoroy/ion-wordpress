@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { PostsResolver } from './blog/posts/posts.resolver';
+import { PostResolver } from './blog/post/post.resolver';
 
 export const routes: Routes = [
   {
@@ -43,5 +45,20 @@ export const routes: Routes = [
   {
     path: 'forgot-password',
     loadComponent: () => import('./auth/forgot-password/forgot-password.page').then( m => m.ForgotPasswordPage)
+  },
+  {
+    path: 'posts',
+    loadComponent: () => import('./blog/posts/posts.page').then( m => m.PostsPage),
+    resolve: {
+      data: PostsResolver
+    },
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange'
+  },
+  {
+    path: 'post/:id',
+    loadComponent: () => import('./blog/post/post.page').then( m => m.PostPage),
+    resolve: {
+      data: PostResolver
+    }
   },
 ];

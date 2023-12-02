@@ -1,0 +1,63 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      post
+    </ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="posts"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="openLogInAlert()">
+        Login
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">
+        post
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <h1 [innerHTML]="post.title?.rendered"></h1>
+  <p class="post-body" [innerHTML]="post.content?.rendered"></p>
+
+  <p>
+    By <b>{{author}}</b> on <span *ngIf="!post.modified">{{post.date | date}}</span><span
+      *ngIf="post.modified">{{post.modified | date}}</span>
+  </p>
+
+  <div *ngFor="let category of categories">
+    <ion-badge class="post-category" color="secondary" [routerLink]="['/posts']"
+      [queryParams]="{ categoryId: category.id,  title: category.name}">
+      {{ category?.name }}
+    </ion-badge>
+  </div>
+
+  <ion-list class="post-comments">
+    <ion-item *ngFor="let comment of comments">
+      <ion-avatar slot="start">
+        <img src="{{comment?.author_avatar_urls[24]}}">
+      </ion-avatar>
+      <ion-label>
+        <h2>{{comment.author_name}}</h2>
+        <p [innerHTML]="comment.content?.rendered"></p>
+      </ion-label>
+    </ion-item>
+  </ion-list> 
+
+  <ion-infinite-scroll (ionInfinite)="loadMoreComments($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more comments...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button expand="block" (click)="createComment()">Add a Comment</ion-button>
+  </ion-toolbar>
+</ion-footer>
