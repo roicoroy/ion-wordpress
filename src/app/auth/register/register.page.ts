@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
@@ -8,6 +8,10 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { PasswordValidator } from 'src/app/shared/form-validators/password.validator';
 import { ModalController, MenuController } from '@ionic/angular/standalone';
 import { ShowHidePasswordComponent } from 'src/app/components/show-hide-password/show-hide-password.component';
+import { RegisterPayload } from 'src/app/shared/wooApi';
+import { Store } from '@ngxs/store';
+import { Subject, takeUntil } from 'rxjs';
+import { AuthActions } from 'src/app/store/auth/auth.actions';
 
 @Component({
   selector: 'app-register',
@@ -24,7 +28,7 @@ import { ShowHidePasswordComponent } from 'src/app/components/show-hide-password
     ShowHidePasswordComponent
   ]
 })
-export class RegisterPage implements OnInit {
+export class RegisterPage implements OnInit, OnDestroy {
 
   signupForm: FormGroup;
   matching_passwords_group: FormGroup;
@@ -48,6 +52,10 @@ export class RegisterPage implements OnInit {
       { type: 'areNotEqual', message: 'Password mismatch' }
     ]
   };
+
+  private store = inject(Store);
+
+  private readonly ngUnsubscribe = new Subject();
 
   constructor(
     public router: Router,
@@ -95,9 +103,26 @@ export class RegisterPage implements OnInit {
   }
 
   doSignup(): void {
-    console.log('do sign up');
-    console.log(this.signupForm.value);
+    // console.log('do sign up');
+    // console.log(this.signupForm.value);
+    const payload: RegisterPayload = {
+      username: '',
+      email: ' string;',
+      user_pass: 'string;',
+      nonce: ' string;',
+      display_name: ' string;',
+      notify: ' string;',
+    }
+    this.store.dispatch(new AuthActions.Register(payload))
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((res) => {
+        console.log(res);
+        // this.router.navigate(['/product-list']);
+      });
     // this.router.navigate(['app/categories']);
   }
-
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next(null);
+    this.ngUnsubscribe.complete();
+  }
 }

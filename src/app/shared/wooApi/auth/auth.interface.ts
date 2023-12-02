@@ -30,9 +30,9 @@ export interface RegisterPayload {
   username: string;
   email: string;
   user_pass?: string;
-  nonce: string;
-  display_name: string;
-  notify: string;
+  nonce?: string;
+  display_name?: string;
+  notify?: string;
 }
 
 export interface RegisterRsponse {

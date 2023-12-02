@@ -62,8 +62,6 @@ export class HomePage implements OnInit {
 
   alertButtons = ['Ok'];
 
-  env = environment.wordpressShopUrl;
-
   constructor(
     public platform: Platform,
     public modalController: ModalController,
@@ -71,13 +69,7 @@ export class HomePage implements OnInit {
     private share: ShareService,
   ) { }
 
-  ionViewWillEnter() {
-  }
-
   ionViewDidEnter() {
-  }
-
-  ngAfterViewInit(): void {
     jarallax(document.querySelectorAll('.jarallax'), {});
 
     jarallax(document.querySelectorAll('.jarallax-img'), {
@@ -86,9 +78,11 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
     this.storage.getKeyAsObservable(COOKIES_ACCEPTED)
-      .pipe()
+      .pipe(
+        
+      )
       .subscribe((isCookiePolicyAccepted: boolean) => {
-        if (isCookiePolicyAccepted != null) {
+        if (isCookiePolicyAccepted) {
           this.isCookiePolicyAccepted = isCookiePolicyAccepted;
         } else {
           this.cookiesToast();
@@ -136,10 +130,6 @@ export class HomePage implements OnInit {
       'Look at my shop, please :)',
       'https://fae.zra.mybluehost.me/public',
     )
-  }
-
-  enterBlueHostShop() {
-    // this.nav.navigateFadeOut(environment.wordpressShopUrl);
   }
 
   navigateFirstPage() {

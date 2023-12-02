@@ -64,7 +64,6 @@ export class ProductListPage implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (p: IHomeListModel) => {
-          console.log(p);
           this.productsList = p.products;
           // console.log(this.productsList);
         },

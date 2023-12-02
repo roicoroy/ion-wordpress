@@ -1,9 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { Observable, Subject, of, takeUntil } from 'rxjs';
 import { WordpressService } from 'src/app/shared/wordpress.service';
 import { AuthService } from 'src/app/shared/wooApi';
 
@@ -19,7 +19,7 @@ import { AuthService } from 'src/app/shared/wooApi';
     RouterLink,
   ]
 })
-export class PostsPage implements OnInit {
+export class PostsPage implements OnInit, OnDestroy {
 
   posts: Array<any> = new Array<any>();
 
@@ -29,7 +29,7 @@ export class PostsPage implements OnInit {
 
   private wooApi = inject(AuthService);
 
-  // loggedInObservable: Observable<any> = this.wooApi.isLoggedIn();
+  private readonly ngUnsubscribe = new Subject();
 
   constructor(
     private router: Router,
@@ -44,19 +44,22 @@ export class PostsPage implements OnInit {
     //     this.loggedInObservable = user == null ? of(false) : of(true);
     //   });
 
-    this.route.data.subscribe(routeData => {
-      const data = routeData['data'];
+    this.route.data
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(routeData => {
+        const data = routeData['data'];
 
-      this.posts = data.posts;
-      this.categoryId = data.categoryId;
-      this.categoryTitle = data.categoryTitle;
-    })
+        this.posts = data.posts;
+        this.categoryId = data.categoryId;
+        this.categoryTitle = data.categoryTitle;
+      })
   }
 
   loadData(event: any) {
     // const page = (Math.ceil(this.posts.length / 10)) + 1;
     const page = 1;
     this.wordpressService.getRecentPosts(this.categoryId, page)
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((newPagePosts: []) => {
         this.posts.push(...newPagePosts);
         // console.log(this.posts);
@@ -64,11 +67,30 @@ export class PostsPage implements OnInit {
       }, err => {
         // there are no more posts available
         event.target.disabled = true;
-      })
+      });
+      // .subscribe({
+      //   next(newPagePosts: any) {
+      //     // @ts-ignore
+      //     this.posts.push(...newPagePosts);
+      //     // @ts-ignore
+      //     console.log(this.posts);
+      //     event.target.complete();
+      //   },
+      //   error(err) {
+      //     console.error('something wrong occurred: ' + err);
+      //   },
+      //   complete() {
+      //     console.log('done');
+      //   },
+      // });
   }
 
   logOut() {
-    
+
   }
 
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next(null);
+    this.ngUnsubscribe.complete();
+  }
 }

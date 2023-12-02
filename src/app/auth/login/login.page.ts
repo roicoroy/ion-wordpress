@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
@@ -10,7 +10,7 @@ import { IStoreSnapshoModel } from 'src/app/store/store.snapshot.interface';
 import { AuthState, IAuthStateModel } from 'src/app/store/auth/auth.state';
 import { LoginPayload } from 'src/app/shared/wooApi';
 import { AuthActions } from 'src/app/store/auth/auth.actions';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -26,7 +26,7 @@ import { Observable } from 'rxjs';
     ShowHidePasswordComponent
   ],
 })
-export class LoginPage implements OnInit {
+export class LoginPage implements OnInit, OnDestroy {
 
   loginForm: FormGroup;
 
@@ -46,6 +46,8 @@ export class LoginPage implements OnInit {
   private menu = inject(MenuController);
 
   private store = inject(Store);
+
+  private readonly ngUnsubscribe = new Subject();
 
   constructor(
     public router: Router,
@@ -68,22 +70,23 @@ export class LoginPage implements OnInit {
 
   doLogin(): void {
     // const token = this.store.selectSnapshot((state: IStoreSnapshoModel) => state.auth.user.token);
-    // console.log(token);
     const loginPaylod: LoginPayload = {
       username: this.loginForm.value.email,
       password: this.loginForm.value.password,
     };
-    // console.log(loginPaylod);
     this.store.dispatch(new AuthActions.DoLogin(loginPaylod))
-      .pipe()
-      .subscribe((res) => {
-        console.log(res);
-        // this.router.navigate(['/product-list']);
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(() => {
+        this.router.navigate(['/product-list']);
       });
   }
 
   goToForgotPassword(): void {
     console.log('redirect to forgot-password page');
     this.router.navigate(['/forgot-password']);
+  }
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next(null);
+    this.ngUnsubscribe.complete();
   }
 }

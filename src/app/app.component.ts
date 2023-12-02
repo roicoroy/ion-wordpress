@@ -7,6 +7,8 @@ import { addIcons } from 'ionicons';
 import { mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, heartOutline, heartSharp, archiveOutline, archiveSharp, trashOutline, trashSharp, warningOutline, warningSharp, bookmarkOutline, bookmarkSharp, call, camera, cameraOutline, cog, cogOutline, home, homeOutline, mail, menu, menuOutline, storefront, storefrontOutline, thumbsUp, thumbsUpOutline, homeSharp, heart } from 'ionicons/icons';
 import { ProductsActions } from './store/products/products.actions';
 import { AuthActions } from './store/auth/auth.actions';
+import { Observable } from 'rxjs';
+import { AppFacade, IAppFacadeModel } from './app.facade';
 
 @Component({
   selector: 'app-root',
@@ -30,13 +32,17 @@ export class AppComponent implements OnInit {
     { title: 'Home', url: '/home', icon: 'home' },
     { title: 'Woo', url: '/product-list', icon: 'storefront' },
     { title: 'Login', url: '/login', icon: 'paper-plane' },
-    { title: 'Register', url: '/register', icon: 'heart' },
     { title: 'Blog', url: '/posts', icon: 'archive' },
   ];
 
+  viewState$!: Observable<IAppFacadeModel>;
+
   private store = inject(Store);
 
+  private facade = inject(AppFacade);
+
   constructor() {
+    this.viewState$ = this.facade.viewState$;
   }
 
   ngOnInit() {

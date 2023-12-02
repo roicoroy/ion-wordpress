@@ -1,12 +1,13 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { LoadingController, AlertController } from '@ionic/angular';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
-import { catchError, of, map } from 'rxjs';
+import { catchError, of, map, Subject } from 'rxjs';
 import { WordpressService, } from 'src/app/shared/wordpress.service';
 import { AuthService } from 'src/app/shared/wooApi';
+import { jarallax } from "jarallax";
 
 @Component({
   selector: 'app-post',
@@ -20,7 +21,7 @@ import { AuthService } from 'src/app/shared/wooApi';
     RouterLink,
   ]
 })
-export class PostPage implements OnInit {
+export class PostPage implements OnInit, OnDestroy {
 
   post: any;
   author!: string;
@@ -28,24 +29,30 @@ export class PostPage implements OnInit {
   categories: any = [];
 
   private wooApi = inject(AuthService);
-  
+
   private loadingController = inject(LoadingController);
-  
+
   private alertController = inject(AlertController);
-  
+
   private router = inject(Router);
-  
+
   private route = inject(ActivatedRoute);
-  
+
   private wordpressService = inject(WordpressService);
+
+  private readonly ngUnsubscribe = new Subject();
 
   async ngOnInit() {
     this.route.data.subscribe(routeData => {
       const data = routeData['data'];
       this.post = data.post;
+      jarallax(document.querySelectorAll('.jarallax'), {
+        containerClass: 'jarallax-image-local',
+        imgSrc: this.post.jetpack_featured_media_url === "" ? 'assets/shapes.svg' : this.post.jetpack_featured_media_url,
+        imgRepeat: 'no-repeat',
+      });
       this.author = data.author.name;
       this.categories = data.categories;
-      // console.log(this.categories);
       this.comments = data.comments;
     });
     this.getComments();
@@ -60,15 +67,14 @@ export class PostPage implements OnInit {
     const page = 1;
     this.comments = [];
     this.wordpressService.getComments(this.post.id, page)
-      .subscribe((comments: any) => {
-        // console.log(comments);
-        // @ts-ignore
-        this.comments.push(...comments);
-        event.target.complete();
-      }, err => {
-        // there are no more comments available
-        event.target.disabled = true;
-      })
+      .subscribe(
+        (comments: any) => {
+          this.comments.push(...comments);
+          event.target.complete();
+        }, 
+        err => {
+          event.target.disabled = true;
+        })
   }
 
   async createComment() {
@@ -158,4 +164,8 @@ export class PostPage implements OnInit {
     await alert.present();
   }
 
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next(null);
+    this.ngUnsubscribe.complete();
+  }
 }
