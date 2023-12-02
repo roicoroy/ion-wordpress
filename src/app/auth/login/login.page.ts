@@ -22,9 +22,7 @@ import { Observable } from 'rxjs';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    IonRouterOutlet,
     RouterLink,
-    RouterLinkActive,
     ShowHidePasswordComponent
   ],
 })
@@ -79,11 +77,13 @@ export class LoginPage implements OnInit {
     this.store.dispatch(new AuthActions.GetAuthToken(loginPaylod))
       .pipe()
       .subscribe((res) => {
-        this.router.navigate(['/product-list']);
+        console.log(res);
+        // this.router.navigate(['/product-list']);
       });
   }
 
   goToForgotPassword(): void {
     console.log('redirect to forgot-password page');
+    this.router.navigate(['/forgot-password']);
   }
 }

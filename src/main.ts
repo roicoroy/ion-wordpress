@@ -49,7 +49,7 @@ bootstrapApplication(AppComponent, {
     })),
     importProvidersFrom(NgxsReduxDevtoolsPluginModule.forRoot()),
     importProvidersFrom(NgxsLoggerPluginModule.forRoot({
-      disabled: true,
+      disabled: false,
     })),
     importProvidersFrom(NgxsStoragePluginModule.forRoot({
       key: [

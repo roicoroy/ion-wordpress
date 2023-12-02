@@ -9,9 +9,9 @@ import { map } from 'rxjs/operators';
 })
 export class WordpressService {
 
-  constructor(public http: HttpClient){}
+  constructor(public http: HttpClient) { }
 
-  getPost(postId: any){
+  getPost(postId: any) {
     return this.http.get(
       environment.wordpress.api_url
       + "posts/" + postId)
@@ -19,38 +19,38 @@ export class WordpressService {
 
   getRecentPosts(categoryId: any, page: number = 1) {
     // if we want to query posts by category
-    let category_url = categoryId? ("&categories=" + categoryId): "";
+    let category_url = categoryId ? ("&categories=" + categoryId) : "";
 
     return this.http.get(
       environment.wordpress.api_url
       + 'posts?page=' + page
       + '&orderby=modified' // order by last modified date
       + category_url)
-    .pipe(
-      map((posts: []) => {
-        posts.forEach((post:any) => {
-          // we remove the "read more" link that the excerpt contains.
-          // this is optional, you can remove this line if you want.
-          post.excerpt.rendered = post.excerpt.rendered.split('<a')[0] + "</p>";
+      .pipe(
+        map((posts: any) => {
+          posts.forEach((post: any) => {
+            // we remove the "read more" link that the excerpt contains.
+            // this is optional, you can remove this line if you want.
+            post.excerpt.rendered = post.excerpt.rendered.split('<a')[0] + "</p>";
+          })
+          return posts;
         })
-        return posts;
-      })
-    )
+      )
   }
 
-  getComments(postId:number, page:number = 1) {
+  getComments(postId: number, page: number = 1) {
     return this.http.get(
       environment.wordpress.api_url
       + "comments?post=" + postId
       + '&page=' + page)
   }
 
-  getAuthor(author) {
+  getAuthor(author: any) {
     return this.http.get(environment.wordpress.api_url + "users/" + author)
   }
 
-  getPostCategories(post) {
-    let observableBatch = [];
+  getPostCategories(post: any) {
+    let observableBatch: any = [];
     post.categories.forEach((category: number) => {
       observableBatch.push(this.getCategory(category));
     });
@@ -69,6 +69,6 @@ export class WordpressService {
       author_email: user.email,
       post: postId,
       content: comment
-    },{ headers: header })
+    }, { headers: header })
   }
 }

@@ -99,17 +99,18 @@
       </ion-button>
     </ion-row>
   </form>
-
-  <div class="legal-stuff">
-    By creating an account you agree to our
-    <ion-text color="primary">
-      <a class="legal-action" (click)="showPrivacyModal()">Privacy Policy</a>
-    </ion-text>
-    and
-    <ion-text color="primary">
-      <a class="legal-action" (click)="showTermsModal()">Terms of use</a>.
-    </ion-text>
-  </div>
-
-
 </ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <div class="legal-stuff">
+      By creating an account you agree to our
+      <ion-text color="primary">
+        <a class="legal-action" (click)="showPrivacyModal()">Privacy Policy</a>
+      </ion-text>
+      and
+      <ion-text color="primary">
+        <a class="legal-action" (click)="showTermsModal()">Terms of use</a>.
+      </ion-text>
+    </div>
+  </ion-toolbar>
+</ion-footer>
