@@ -22,13 +22,13 @@ export class PostResolver implements Resolve<any> {
                     const author = this.wordpressService.getAuthor(post.author);
                     const categories = this.wordpressService.getPostCategories(post);
                     const comments = this.wordpressService.getComments(post.id);
-
                     return forkJoin({ author, categories, comments })
                         .pipe(
                             map(postData => {
                                 return { ...postData, post };
                             })
-                        )
+                        );
+                        
                 })
             );
     }

@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { LoadingController, AlertController } from '@ionic/angular';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { catchError, of, map } from 'rxjs';
-import { AuthenticationService } from 'src/app/shared/authentication.service';
 import { WordpressService, } from 'src/app/shared/wordpress.service';
+import { AuthService } from 'src/app/shared/wooApi';
 
 @Component({
   selector: 'app-post',
@@ -27,14 +27,17 @@ export class PostPage implements OnInit {
   comments: any = [];
   categories: any = [];
 
-  constructor(
-    public loadingController: LoadingController,
-    public alertController: AlertController,
-    private router: Router,
-    private route: ActivatedRoute,
-    public wordpressService: WordpressService,
-    public authenticationService: AuthenticationService
-  ) { }
+  private wooApi = inject(AuthService);
+  
+  private loadingController = inject(LoadingController);
+  
+  private alertController = inject(AlertController);
+  
+  private router = inject(Router);
+  
+  private route = inject(ActivatedRoute);
+  
+  private wordpressService = inject(WordpressService);
 
   async ngOnInit() {
     this.route.data.subscribe(routeData => {
@@ -42,10 +45,10 @@ export class PostPage implements OnInit {
       this.post = data.post;
       this.author = data.author.name;
       this.categories = data.categories;
-      console.log(this.categories);
+      // console.log(this.categories);
       this.comments = data.comments;
-      console.log(this.comments);
-    })
+    });
+    this.getComments();
   }
 
   getComments() {
@@ -53,11 +56,12 @@ export class PostPage implements OnInit {
   }
 
   loadMoreComments(event: any) {
-    const page = (this.comments.length / 10) + 1;
-
+    // const page = (this.comments.length / 10) + 1;
+    const page = 1;
+    this.comments = [];
     this.wordpressService.getComments(this.post.id, page)
       .subscribe((comments: any) => {
-        console.log(comments);
+        // console.log(comments);
         // @ts-ignore
         this.comments.push(...comments);
         event.target.complete();
@@ -68,23 +72,22 @@ export class PostPage implements OnInit {
   }
 
   async createComment() {
-    const loggedUser = await this.authenticationService.getUser();
-
+    const loggedUser = await this.wooApi.getUser();
+    console.log(loggedUser);
     if (loggedUser) {
-      let user = JSON.parse(loggedUser);
-
+      // let user = JSON.parse(loggedUser);
       // check if token is valid
-      this.authenticationService.validateAuthToken(user.token)
+      this.wooApi.validateAuthToken(loggedUser.token)
         .pipe(
           catchError(error => of(error)),
           map(result => {
+            // console.log(result);
             if (result.error) {
-              // token is expired
               this.openLogInAlert();
             }
             else {
               // user is logged in and token is valid
-              this.openEnterCommentAlert(user);
+              this.openEnterCommentAlert(loggedUser);
             }
           })
         ).subscribe()

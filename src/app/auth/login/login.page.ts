@@ -74,7 +74,7 @@ export class LoginPage implements OnInit {
       password: this.loginForm.value.password,
     };
     // console.log(loginPaylod);
-    this.store.dispatch(new AuthActions.GetAuthToken(loginPaylod))
+    this.store.dispatch(new AuthActions.DoLogin(loginPaylod))
       .pipe()
       .subscribe((res) => {
         console.log(res);

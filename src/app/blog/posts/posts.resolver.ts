@@ -21,7 +21,7 @@ export class PostsResolver implements Resolve<any> {
             .pipe(
                 map((posts) => {
                     
-                    console.log(posts);
+                    // console.log(posts);
 
                     return { posts, categoryTitle, categoryId };
                 })

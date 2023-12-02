@@ -1,4 +1,4 @@
-import { CreateNonce, Customer, LoginPayload, RegisterPayload } from "src/app/shared/wooApi";
+import { CreateNonce, LoginPayload, RegisterPayload } from "src/app/shared/wooApi";
 
 export namespace AuthActions {
     export class CreateNonceAction {
@@ -16,6 +16,13 @@ export namespace AuthActions {
     export class GetAuthToken {
         static readonly type = '[AuthActions] GetAuthToken';
         constructor(public payload: LoginPayload) { }
+    }
+    export class RefresUserState {
+        static readonly type = '[AuthActions] RefresUserState';
+    }
+    export class DoLogin {
+        static readonly type = '[AuthActions] Do Login';
+        constructor(public data: LoginPayload) { }
     }
     export class GenerateAuthCookie {
         static readonly type = '[AuthActions] GenerateAuthCookie';

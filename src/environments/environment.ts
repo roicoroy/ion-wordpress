@@ -13,8 +13,10 @@ export const environment = {
     consumer_secret: "cs_f420b92d90138bfa9f2ef6c5e9dcf8dcae386b3b"
   },
   wordpress: {
-    api_url: 'https://fae.zra.mybluehost.me/wp-json/wp/v2/',
-    auth_url: 'https://fae.zra.mybluehost.me/wp-json/jwt-auth/v1/token'
+    api_url: 'wp-json/wp/v2/',
+    auth_url: 'wp-json/jwt-auth/v1/token'
+    // api_url: 'https://fae.zra.mybluehost.me/wp-json/wp/v2/',
+    // auth_url: 'https://fae.zra.mybluehost.me/wp-json/jwt-auth/v1/token'
   }
 };
 

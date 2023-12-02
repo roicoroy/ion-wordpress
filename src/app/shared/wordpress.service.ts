@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -42,7 +42,7 @@ export class WordpressService {
     return this.http.get(
       environment.wordpress.api_url
       + "comments?post=" + postId
-      + '&page=' + page)
+      + '&page=' + page);
   }
 
   getAuthor(author: any) {
@@ -64,7 +64,7 @@ export class WordpressService {
 
   createComment(postId: number, user: any, comment: string) {
     let header: HttpHeaders = new HttpHeaders().append('Authorization', 'Bearer ' + user.token);
-    return this.http.post(environment.wordpress.api_url + "comments?token=" + user.token, {
+    return this.http.post(environment.wordpress.api_url + "comments", {
       author_name: user.displayname,
       author_email: user.email,
       post: postId,

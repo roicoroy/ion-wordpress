@@ -6,6 +6,7 @@ import { Store } from '@ngxs/store';
 import { addIcons } from 'ionicons';
 import { mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, heartOutline, heartSharp, archiveOutline, archiveSharp, trashOutline, trashSharp, warningOutline, warningSharp, bookmarkOutline, bookmarkSharp, call, camera, cameraOutline, cog, cogOutline, home, homeOutline, mail, menu, menuOutline, storefront, storefrontOutline, thumbsUp, thumbsUpOutline, homeSharp, heart } from 'ionicons/icons';
 import { ProductsActions } from './store/products/products.actions';
+import { AuthActions } from './store/auth/auth.actions';
 
 @Component({
   selector: 'app-root',
@@ -14,13 +15,13 @@ import { ProductsActions } from './store/products/products.actions';
   standalone: true,
   imports: [
     RouterLink,
-    RouterLinkActive, 
-    CommonModule, 
-    IonApp, 
-    IonSplitPane, 
-    IonMenu, 
-    IonContent, 
-    IonList, 
+    RouterLinkActive,
+    CommonModule,
+    IonApp,
+    IonSplitPane,
+    IonMenu,
+    IonContent,
+    IonList,
     IonListHeader, IonNote, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterOutlet],
 })
 export class AppComponent implements OnInit {
@@ -31,10 +32,7 @@ export class AppComponent implements OnInit {
     { title: 'Login', url: '/login', icon: 'paper-plane' },
     { title: 'Register', url: '/register', icon: 'heart' },
     { title: 'Blog', url: '/posts', icon: 'archive' },
-    // { title: 'Trash', url: '/folder/trash', icon: 'trash' },
-    // { title: 'Spam', url: '/folder/spam', icon: 'warning' },
   ];
-  public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
 
   private store = inject(Store);
 
@@ -42,7 +40,9 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.store.dispatch(new ProductsActions.GetProducts());
+
+    this.store.dispatch(new AuthActions.RefresUserState());
+
     addIcons({
       homeSharp,
       home,
@@ -75,6 +75,10 @@ export class AppComponent implements OnInit {
       bookmarkOutline,
       bookmarkSharp
     });
+  }
+
+  logout() {
+    this.store.dispatch(new AuthActions.AuthLogout());
   }
 }
 
