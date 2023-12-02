@@ -36,8 +36,6 @@ export class ProductsState {
         this.wooProducts.retrieveProducts()
             .pipe(
                 tap((response: Product[] | any) => {
-                    // console.log(response);
-                    // console.log(response.products);
                     ctx.patchState({
                         products: response.products,
                     });

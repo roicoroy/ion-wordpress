@@ -1,11 +1,10 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
-import { Observable, Subject, of, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { WordpressService } from 'src/app/shared/wordpress.service';
-import { AuthService } from 'src/app/shared/wooApi';
 
 @Component({
   selector: 'app-posts',
@@ -27,8 +26,6 @@ export class PostsPage implements OnInit, OnDestroy {
 
   categoryTitle!: string;
 
-  private wooApi = inject(AuthService);
-
   private readonly ngUnsubscribe = new Subject();
 
   constructor(
@@ -38,12 +35,6 @@ export class PostsPage implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    // this.wooApi.loggedUserObservable()
-    //   .subscribe(user => {
-    //     // console.log(user);
-    //     this.loggedInObservable = user == null ? of(false) : of(true);
-    //   });
-
     this.route.data
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(routeData => {
@@ -62,31 +53,11 @@ export class PostsPage implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((newPagePosts: []) => {
         this.posts.push(...newPagePosts);
-        // console.log(this.posts);
         event.target.complete();
-      }, err => {
-        // there are no more posts available
+      }, 
+      (err) => {
         event.target.disabled = true;
       });
-      // .subscribe({
-      //   next(newPagePosts: any) {
-      //     // @ts-ignore
-      //     this.posts.push(...newPagePosts);
-      //     // @ts-ignore
-      //     console.log(this.posts);
-      //     event.target.complete();
-      //   },
-      //   error(err) {
-      //     console.error('something wrong occurred: ' + err);
-      //   },
-      //   complete() {
-      //     console.log('done');
-      //   },
-      // });
-  }
-
-  logOut() {
-
   }
 
   ngOnDestroy(): void {

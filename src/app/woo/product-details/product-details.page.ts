@@ -14,9 +14,8 @@ import { ActivatedRoute } from '@angular/router';
 export class ProductDetailsPage implements OnInit {
   
   public id!: string;
+  
   private activatedRoute = inject(ActivatedRoute);
-
-  constructor() { }
 
   ngOnInit() {
     this.id = this.activatedRoute.snapshot.paramMap.get('id') as string;

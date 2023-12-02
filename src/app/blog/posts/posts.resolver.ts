@@ -20,9 +20,6 @@ export class PostsResolver implements Resolve<any> {
         return this.wordpressService.getRecentPosts(categoryId)
             .pipe(
                 map((posts) => {
-                    
-                    // console.log(posts);
-
                     return { posts, categoryTitle, categoryId };
                 })
             )

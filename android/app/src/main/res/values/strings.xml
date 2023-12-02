@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">ND Graphics</string>
+    <string name="title_activity_main">ND Graphics</string>
+    <string name="package_name">ion.wordpress.uk</string>
+    <string name="custom_url_scheme">ion.wordpress.uk</string>
+</resources>

@@ -26,8 +26,8 @@ export class ThemeService {
       });
   }
 
-  changeTheme(ev: any) {
-    this.ionStorage.storageSet(DARK_MODE, ev.detail.checked).then(() => {
+  async changeTheme(ev: any) {
+    await this.ionStorage.storageSet(DARK_MODE, ev.detail.checked).then(() => {
       if (ev.detail.checked) {
         this.document.body.classList.toggle('dark', ev.detail.checked);
       }

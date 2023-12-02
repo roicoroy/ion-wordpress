@@ -5,14 +5,8 @@ import { PostResolver } from './blog/post/post.resolver';
 export const routes: Routes = [
   {
     path: '',
-    // redirectTo: 'folder/inbox',
     redirectTo: 'nd-graphics',
     pathMatch: 'full',
-  },
-  {
-    path: 'folder/:id',
-    loadComponent: () =>
-      import('./folder/folder.page').then((m) => m.FolderPage),
   },
   {
     path: 'home',
@@ -60,6 +54,10 @@ export const routes: Routes = [
     resolve: {
       data: PostResolver
     }
+  },
+  {
+    path: 'settings',
+    loadComponent: () => import('./settings/settings.page').then(m => m.SettingsPage)
   },
 ];
 

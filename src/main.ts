@@ -6,7 +6,7 @@ import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalo
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { environment } from './environments/environment';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { WooInterceptor } from './app/shared/woo.interceptor';
@@ -20,7 +20,14 @@ import { ProductsState } from './app/store/products/products.state';
 import { register } from 'swiper/element/bundle';
 import { AuthState } from './app/store/auth/auth.state';
 import { CustomerState } from './app/store/customer/customer.state';
+import { IMAGE_CONFIG } from '@angular/common';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 register();
+
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
 if (environment.production) {
   enableProdMode();
@@ -33,6 +40,14 @@ bootstrapApplication(AppComponent, {
       useClass: WooInterceptor,
       multi: true
     },
+    {
+      // https://angular.io/guide/image-directive
+      provide: IMAGE_CONFIG,
+      useValue: {
+        disableImageSizeWarning: true,
+        disableImageLazyLoadWarning: true
+      }
+    },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular({
       mode: 'ios',
@@ -40,6 +55,15 @@ bootstrapApplication(AppComponent, {
     }),
     importProvidersFrom(BrowserAnimationsModule),
     importProvidersFrom(HttpClientModule),
+    importProvidersFrom(
+      TranslateModule.forRoot({
+        loader: {
+          provide: TranslateLoader,
+          useFactory: (createTranslateLoader),
+          deps: [HttpClient]
+        }
+      }),
+    ),
     importProvidersFrom(NgxsModule.forRoot([
       AuthState,
       CustomerState,

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "185988870543",
+    "project_id": "ion-wordpress-fcm",
+    "storage_bucket": "ion-wordpress-fcm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:185988870543:android:961037c5fdfaf4ccb91bfa",
+        "android_client_info": {
+          "package_name": "ion.wordpress.uk"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHW8YhrEciJv22yleSOvsEcGNYCw4MKOM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

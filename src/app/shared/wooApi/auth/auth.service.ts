@@ -89,34 +89,6 @@ export class AuthService {
     return user;
   }
 
-  // // check if user is logged in and token is valid
-  // isLoggedIn(): Observable<boolean> {
-  //   return from(this.getUserOb())
-  //     .pipe(
-  //       concatMap((user: IUserResponseModel | any) => {
-  //         // console.log(user);
-  //         if (user) { // user is the value returned from the local storage
-  //           return this.validateAuthToken(user.token)
-  //             .pipe(
-  //               catchError(error => of(error)),
-  //               map(result => {
-  //                 if (result.error) {
-  //                   // token is expired
-  //                   return false;
-  //                 }
-  //                 else
-  //                   // user is logged in and token is valid
-  //                   return true;
-  //               })
-  //             )
-  //         } else {
-  //           // there is no logged user
-  //           return of(false);
-  //         }
-  //       })
-  //     );
-  // }
-
   doLogin(username: string, password: string) {
     return this.http.post(environment.wordpress.auth_url, {
       username: username,

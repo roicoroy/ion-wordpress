@@ -18,8 +18,6 @@ export class ProductsListFacade {
 
     @Select(ProductsState.getProducts) products$!: Observable<Product[]>;
 
-    // @Select(AuthState.getUser) user$!: Observable<IUserResponseModel>;
-
     readonly viewState$: Observable<any>;
 
     constructor() {
