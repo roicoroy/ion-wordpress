@@ -1344,6 +1344,11 @@
   resolved "https://registry.npmjs.org/@capacitor/browser/-/browser-5.1.0.tgz"
   integrity sha512-7togqchk2Tvq4SmLaWhcrd4x48ES/GEZsceM+29aun7WhxQEVcDU0cJsVdSU2LNFwNhWgPV2GW90etVd1B3OdQ==
 
+"@capacitor/camera@^5.0.7":
+  version "5.0.7"
+  resolved "https://registry.npmjs.org/@capacitor/camera/-/camera-5.0.7.tgz"
+  integrity sha512-1Wk3Dk0UhhNHdBB07UrPvUOSL7Wi5gFZRyLY1LZL2awt34iqy2cnajtfJplFmEZHk8lD0i7NAl3HbkWm4td4OQ==
+
 "@capacitor/cli@5.5.1":
   version "5.5.1"
   resolved "https://registry.npmjs.org/@capacitor/cli/-/cli-5.5.1.tgz"
@@ -1367,7 +1372,7 @@
     tslib "^2.4.0"
     xml2js "^0.5.0"
 
-"@capacitor/core@^3.0.0", "@capacitor/core@^5.0.0", "@capacitor/core@^5.5.0", "@capacitor/core@5.5.1":
+"@capacitor/core@^3.0.0", "@capacitor/core@^5.0.0", "@capacitor/core@^5.1.1", "@capacitor/core@^5.5.0", "@capacitor/core@5.5.1":
   version "5.5.1"
   resolved "https://registry.npmjs.org/@capacitor/core/-/core-5.5.1.tgz"
   integrity sha512-VG6Iv8Q7ZAbvjodxpvjcSe0jfxUwZXnvjbi93ehuJ6eYP8U926qLSXyrT/DToZq+F6v/HyGyVgn3mrE/9jW2Tg==
@@ -1378,6 +1383,11 @@
   version "5.0.6"
   resolved "https://registry.npmjs.org/@capacitor/device/-/device-5.0.6.tgz"
   integrity sha512-tmjK0H8IKbDLMcmzZzJPbV+9yLkKJ76QOdz4A7fZAOYx2GnFHsFngxldq/wKotGAJuDX/ih3ZzHNrzVguzlv2g==
+
+"@capacitor/filesystem@^5.1.4":
+  version "5.1.4"
+  resolved "https://registry.npmjs.org/@capacitor/filesystem/-/filesystem-5.1.4.tgz"
+  integrity sha512-10EM1KvFMs+pTzxkcflspzxBWcX9sOnS9nTP5Afjr5hn4OxLrwTFySw2Z12Uv6jdN4OnhY3jXtDKXPljXvXILg==
 
 "@capacitor/haptics@5.0.6":
   version "5.0.6"
@@ -1403,6 +1413,11 @@
   version "5.0.6"
   resolved "https://registry.npmjs.org/@capacitor/share/-/share-5.0.6.tgz"
   integrity sha512-/dVOW7kcuuD7hWB9Z1drArIpEk+5JCoMnMrAs2c7CLp3q5PeaXNJjTkGr6RJ1OtMhsHyXc6DAFwQ4frFkmZsgw==
+
+"@capacitor/splash-screen@^5.0.6":
+  version "5.0.6"
+  resolved "https://registry.npmjs.org/@capacitor/splash-screen/-/splash-screen-5.0.6.tgz"
+  integrity sha512-9B8wSm89D+LlshFw8B+mjPU8pJNf1WOx2mkMjMvcH0/EqxNaE+ZaO8lPCX+9WvWSEZs3O3l11qiSnOFHeK0t9A==
 
 "@capacitor/status-bar@^5.0.6":
   version "5.0.6"

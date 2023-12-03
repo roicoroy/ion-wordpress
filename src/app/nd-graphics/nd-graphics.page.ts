@@ -32,9 +32,9 @@ export class NdGraphicsPage implements OnInit {
 
   @ViewChild(IonModal) modal!: IonModal;
 
-  swiperModules = [IonicSlides];
-
   @ViewChild('swiper') swiperRef: ElementRef | undefined;
+
+  swiperModules = [IonicSlides];
 
   swiper?: Swiper;
 

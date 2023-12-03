@@ -1,4 +1,4 @@
-import { enableProdMode, importProvidersFrom } from '@angular/core';
+import { LOCALE_ID, enableProdMode, importProvidersFrom } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { RouteReuseStrategy, provideRouter } from '@angular/router';
 import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalone';
@@ -18,16 +18,21 @@ import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
 import { ProductsState } from './app/store/products/products.state';
 import { register } from 'swiper/element/bundle';
+register();
 import { AuthState } from './app/store/auth/auth.state';
 import { CustomerState } from './app/store/customer/customer.state';
-import { IMAGE_CONFIG } from '@angular/common';
+import { IMAGE_CONFIG, registerLocaleData } from '@angular/common';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-register();
-
+import localePt from '@angular/common/locales/pt';
+import localeEn from '@angular/common/locales/en';
+registerLocaleData(localeEn, 'en');
+registerLocaleData(localePt, 'pt');
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
+import { defineCustomElements } from '@ionic/pwa-elements/loader';
+defineCustomElements(window);
 
 if (environment.production) {
   enableProdMode();
@@ -40,6 +45,7 @@ bootstrapApplication(AppComponent, {
       useClass: WooInterceptor,
       multi: true
     },
+    { provide: LOCALE_ID, useValue: 'en' },
     {
       // https://angular.io/guide/image-directive
       provide: IMAGE_CONFIG,

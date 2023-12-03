@@ -1,8 +1,8 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AlertController, IonicModule, Platform } from '@ionic/angular';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { Share } from '@capacitor/share';
 import { driver } from "driver.js";
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -11,6 +11,13 @@ import { IonStorageService } from '../shared/utils/ionstorage.service';
 import { ThemeService, DARK_MODE } from '../shared/utils/theme.service';
 import { LanguageService, SAVED_LANGUAGE } from '../shared/language/language.service';
 import { ILanguageModel } from '../shared/language/language.model';
+import { ISeetingsFacadeState, SettingsFacade } from './settngs.facade';
+import { NgxsFormPluginModule } from '@ngxs/form-plugin';
+import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
+import { NgxsModule } from '@ngxs/store';
+import { ImagePickerComponent, onLoadImage } from '../components/image-picker/image-picker.component';
+import { KeypadModule } from '../shared/native/keyboard/keypad.module';
+import { Capacitor } from '@capacitor/core';
 
 @Component({
   selector: 'app-settings',
@@ -22,19 +29,25 @@ import { ILanguageModel } from '../shared/language/language.model';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    TranslateComponent,
     TranslateModule,
+    NgxsModule,
+    NgxsFormPluginModule,
+    NgxsStoragePluginModule,
+    ImagePickerComponent,
+    KeypadModule,
   ]
 })
-export class SettingsPage implements OnInit {
+export class SettingsPage implements OnInit, OnDestroy {
 
   pageTitle = 'Settings';
 
   settingsForm: FormGroup;
 
-  darkModeModel: boolean | null = null;
-
   pushAcceptedModel: boolean | null = null;
+
+  pushAccepted = false;
+
+  isDarkMode = false;
 
   appDarkMode$!: Observable<any>;
 
@@ -46,33 +59,33 @@ export class SettingsPage implements OnInit {
 
   translations: any;
 
-  private storage = inject(Platform);
+  userAvatar!: string;
+
+  private platform = inject(Platform);
 
   private alert = inject(AlertController);
 
+  private facade = inject(SettingsFacade);
+
+  private ionStorage = inject(IonStorageService);
+
+  private readonly ngUnsubscribe = new Subject();
+
+  viewState$: Observable<ISeetingsFacadeState>;
+
   constructor(
     private theme: ThemeService,
-    private ionStorage: IonStorageService,
     public translate: TranslateService,
     public languageService: LanguageService,
     public alertController: AlertController,
   ) {
+
+    this.viewState$ = this.facade.viewState$;
+
     this.settingsForm = new FormGroup({
       'darkMode': new FormControl(null),
       'pushAccepted': new FormControl(null),
     });
-  }
-
-  driverInit() {
-    const driverObj = driver({
-      showProgress: true,
-      popoverClass: 'driverjs-theme',
-      popoverOffset: 0,
-      steps: [
-        { element: '#share-button', popover: { title: 'Compartilhe!', description: 'Envie as promoções para seus amigos', side: "bottom", align: 'end' } },
-      ]
-    });
-    driverObj.drive();
   }
 
   getTranslations() {
@@ -80,6 +93,14 @@ export class SettingsPage implements OnInit {
       .subscribe((translations) => {
         this.translations = translations;
       });
+  }
+
+  ionViewWillEnter(){
+    this.ionStorage.getKeyAsObservable('userAvatar')
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe((userAvatar: string) => {
+      this.userAvatar = userAvatar;
+    });
   }
 
   ngOnInit() {
@@ -93,18 +114,19 @@ export class SettingsPage implements OnInit {
     this.ionStorage.getKeyAsObservable(DARK_MODE)
       .pipe()
       .subscribe((isDarkMode: boolean) => {
-        // console.log('appDarkMode', isDarkMode);
-        this.darkModeModel = isDarkMode;
+        this.isDarkMode = isDarkMode;
       });
 
-    this.settingsForm.controls[DARK_MODE].valueChanges.subscribe(value => {
-      this.darkModeModel = value;
-    });
+    this.settingsForm.controls[DARK_MODE].valueChanges
+      .subscribe(value => {
+        this.isDarkMode = value;
+      });
 
-    this.settingsForm.controls['pushAccepted'].valueChanges.subscribe(value => {
-      this.pushAcceptedModel = value;
-      this.ionStorage.storageSet('pushAccepted', this.pushAcceptedModel)
-    });
+    this.settingsForm.controls['pushAccepted'].valueChanges
+      .subscribe(value => {
+        this.pushAcceptedModel = value;
+        this.ionStorage.storageSet('pushAccepted', this.pushAcceptedModel)
+      });
   }
 
   async onChangeTheme(ev: any) {
@@ -134,6 +156,52 @@ export class SettingsPage implements OnInit {
     await alert.present();
   }
 
+  async onFCMChange($event: any) {
+    this.pushAccepted = $event.detail.checked;
+    // let permStatus = await PushNotifications.checkPermissions();
+    // console.log(permStatus);
+    // this.facade.setFCMStatus(this.pushAccepted);
+  }
+
+  onDarkModeChange($event: any) {
+    this.isDarkMode = $event.detail.checked;
+    this.facade.setDarkMode(this.isDarkMode);
+  }
+
+  updateUser() {
+    // console.log(this.userForm.value);
+    // this.store.dispatch(new UserProfileActions.UpdateStrapiUser(this.userForm.value));
+  }
+
+  async onImagePicked(file: any) {
+    const response = await fetch(file.webviewPath);
+    const blob = await response.blob();
+    const formData = new FormData();
+    formData.append('files', blob, file.name);
+    const userAvatar = await onLoadImage(file)
+    this.ionStorage.storageRemove('userAvatar').then(() => {
+      this.ionStorage.storageSet('userAvatar', userAvatar);
+      this.userAvatar = userAvatar;
+    });
+    // return this.uploadProfilePicture(formData);
+  }
+
+  async uploadProfilePicture(formData: FormData) {
+    this.facade.appUploadProfileImage(formData);
+  }
+
+  driverInit() {
+    const driverObj = driver({
+      showProgress: true,
+      popoverClass: 'driverjs-theme',
+      popoverOffset: 0,
+      steps: [
+        { element: '#share-button', popover: { title: 'Compartilhe!', description: 'Envie as promoções para seus amigos', side: "bottom", align: 'end' } },
+      ]
+    });
+    driverObj.drive();
+  }
+  
   async openLanguageChooser() {
     this.availableLanguages = this.languageService.getLanguages()
       .map((item: any) => ({
@@ -167,5 +235,10 @@ export class SettingsPage implements OnInit {
       ]
     });
     await alert.present();
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next(null);
+    this.ngUnsubscribe.complete();
   }
 }
