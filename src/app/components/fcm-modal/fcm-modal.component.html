@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Ionic Modal Popup Example</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col text-center>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-subtitle>
+              {{ notificationPayload.title }}
+            </ion-card-subtitle>
+            <ion-card-title>
+              
+            </ion-card-title>
+            <ion-img [src]="notificationPayload.data.image"></ion-img>
+          </ion-card-header>
+          <ion-card-content>
+            {{ notificationPayload.body }}
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col text-center>
+        <ion-button (click)="closeModel()">Close</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

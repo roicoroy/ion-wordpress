@@ -9,6 +9,10 @@ export namespace UserProfileActions {
         public static readonly type = '[UserProfileActions] Update Fcm Accepted';
         constructor(public readonly fcmAccepted: boolean) { }
     }
+    export class SetFcmToken {
+        public static readonly type = '[UserProfileActions] Set Fcm Token';
+        constructor(public readonly fcmToken: string) { }
+    }
     export class UpdateStrapiUser {
         public static readonly type = '[UserProfileActions] Update Strapi User';
         constructor(public readonly userForm: Form) { }

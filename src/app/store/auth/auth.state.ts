@@ -5,6 +5,7 @@ import { tap, catchError, Observable } from "rxjs";
 import { AuthActions } from "./auth.actions";
 import { IStoreSnapshoModel } from "../store.snapshot.interface";
 import { IonStorageService } from "src/app/shared/utils/ionstorage.service";
+import { ErrorLoggingActions } from "../errors-logging/errors-logging.actions";
 
 export interface IUserResponseModel {
     token: string | null;
@@ -61,10 +62,7 @@ export class AuthState {
     */
     @Action(AuthActions.Register)
     register(ctx: StateContext<IAuthStateModel>, { registerData }: AuthActions.Register) {
-        // console.log(registerData);
-
         const stateUser = this.store.selectSnapshot((state: IStoreSnapshoModel) => state.auth.user);
-        console.log(stateUser.token);
         if (stateUser.token) {
             this.wooApi.doRegister(registerData, stateUser.token)
                 .pipe(
@@ -72,6 +70,7 @@ export class AuthState {
                         ctx.patchState({
                             isLoggedIn: false
                         });
+                        this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(e));
                         return new Observable(obs => obs.error(e));
                     })
                 )
@@ -107,6 +106,7 @@ export class AuthState {
                     ctx.patchState({
                         isLoggedIn: false
                     });
+                    this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(e));
                     return new Observable(obs => obs.error(e));
                 })
             )
@@ -140,6 +140,7 @@ export class AuthState {
                     ctx.patchState({
                         isLoggedIn: false
                     });
+                    this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(e));
                     return new Observable(obs => obs.error(e));
                 })
             )
@@ -165,6 +166,7 @@ export class AuthState {
                     ctx.patchState({
                         isLoggedIn: false
                     });
+                    this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(e));
                     return new Observable(obs => obs.error(e));
                 })
             )
@@ -187,6 +189,7 @@ export class AuthState {
                     console.log(user);
                 }),
                 catchError(e => {
+                    this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(e));
                     return new Observable(obs => obs.error(e));
                 })
             )
@@ -235,7 +238,10 @@ export class AuthState {
                         isLoggedIn: false
                     });
                 },
-                (err) => console.log('Error logging out')
+                (e) => {
+                    this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(e));
+                    console.log('Error logging out');
+                }
             )
     }
 

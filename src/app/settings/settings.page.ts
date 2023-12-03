@@ -18,6 +18,7 @@ import { NgxsModule } from '@ngxs/store';
 import { ImagePickerComponent, onLoadImage } from '../components/image-picker/image-picker.component';
 import { KeypadModule } from '../shared/native/keyboard/keypad.module';
 import { Capacitor } from '@capacitor/core';
+import { FcmService } from '../shared/fcm.service';
 
 @Component({
   selector: 'app-settings',
@@ -71,6 +72,8 @@ export class SettingsPage implements OnInit, OnDestroy {
 
   private readonly ngUnsubscribe = new Subject();
 
+  private fcmService = inject(FcmService);
+
   viewState$: Observable<ISeetingsFacadeState>;
 
   constructor(
@@ -95,12 +98,12 @@ export class SettingsPage implements OnInit, OnDestroy {
       });
   }
 
-  ionViewWillEnter(){
+  ionViewWillEnter() {
     this.ionStorage.getKeyAsObservable('userAvatar')
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe((userAvatar: string) => {
-      this.userAvatar = userAvatar;
-    });
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((userAvatar: string) => {
+        this.userAvatar = userAvatar;
+      });
   }
 
   ngOnInit() {
@@ -118,13 +121,13 @@ export class SettingsPage implements OnInit, OnDestroy {
       });
 
     this.settingsForm.controls[DARK_MODE].valueChanges
-      .subscribe(value => {
-        this.isDarkMode = value;
+      .subscribe((isDarkMode: boolean) => {
+        this.isDarkMode = isDarkMode;
       });
 
     this.settingsForm.controls['pushAccepted'].valueChanges
-      .subscribe(value => {
-        this.pushAcceptedModel = value;
+      .subscribe((isPushAccepted: boolean) => {
+        this.pushAcceptedModel = isPushAccepted;
         this.ionStorage.storageSet('pushAccepted', this.pushAcceptedModel)
       });
   }
@@ -158,9 +161,12 @@ export class SettingsPage implements OnInit, OnDestroy {
 
   async onFCMChange($event: any) {
     this.pushAccepted = $event.detail.checked;
-    // let permStatus = await PushNotifications.checkPermissions();
-    // console.log(permStatus);
-    // this.facade.setFCMStatus(this.pushAccepted);
+    this.facade.setFCMStatus(this.pushAccepted);
+    this.fcmService.requestPermission();
+  }
+
+  postMockSubscribeData(fcmToken: string) {
+    this.fcmService.postSubscribeData(fcmToken);
   }
 
   onDarkModeChange($event: any) {
@@ -201,7 +207,7 @@ export class SettingsPage implements OnInit, OnDestroy {
     });
     driverObj.drive();
   }
-  
+
   async openLanguageChooser() {
     this.availableLanguages = this.languageService.getLanguages()
       .map((item: any) => ({

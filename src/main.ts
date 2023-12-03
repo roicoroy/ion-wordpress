@@ -33,6 +33,8 @@ export function createTranslateLoader(http: HttpClient) {
 }
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
 import { KeypadModule } from './app/shared/native/keyboard/keypad.module';
+import { UserProfileState } from './app/store/settings/settings.state';
+import { ErrorsLoggingState } from './app/store/errors-logging/errors-logging.state';
 defineCustomElements(window);
 
 if (environment.production) {
@@ -76,6 +78,8 @@ bootstrapApplication(AppComponent, {
       AuthState,
       CustomerState,
       ProductsState,
+      UserProfileState,
+      ErrorsLoggingState
     ], {
       developmentMode: false,
     }
@@ -88,7 +92,9 @@ bootstrapApplication(AppComponent, {
       key: [
         'auth',
         'customer',
-        'products'
+        'products',
+        'profile',
+        'errors'
       ]
     })),
     importProvidersFrom(NgxsFormPluginModule.forRoot()),

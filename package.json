@@ -11,7 +11,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "open-ios": "ionic build && npx cap sync && npx cap open ios",
-    "android": "ionic build && npx cap sync && npx cap open android",
+    "open-android": "ionic build && npx cap sync && npx cap open android",
     "ios-live-load": "ionic capacitor run ios -l --external",
     "android-live-load": "ionic capacitor run android -l --external",
     "deploy-apache-local": "npm run build && cp -r /Users/ricardobento/Documents/AMIGAO-WORDPRESS/ion-wordpress/www/* /Applications/MAMP/htdocs/public",

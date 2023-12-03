@@ -1,8 +1,6 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable, OnDestroy, inject } from "@angular/core";
-import { Store } from "@ngxs/store";
-import { Observable, Subject, takeUntil } from "rxjs";
-import { environment } from "src/environments/environment";
+import { Subject } from "rxjs";
 
 @Injectable({
     providedIn: 'root'
@@ -17,8 +15,7 @@ export class UserProfileStateService implements OnDestroy {
         withCredentials: true,
     };
     subscription = new Subject();
-
-    // private store = inject(Store);
+    ;
     private httpClient = inject(HttpClient);
 
     uploadStrapiImageToServer(formData: FormData) {
