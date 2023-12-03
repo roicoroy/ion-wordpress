@@ -84,8 +84,6 @@ export class ProductListPage implements OnInit, OnDestroy {
   }
 
   openGallery(gallery: Images[] | undefined, index: number): void {
-    console.log(gallery);
-
     const album: IAlbum[] | any = gallery?.map((element: any, i) => ({
       src: element.src,
       thumb: element.src,

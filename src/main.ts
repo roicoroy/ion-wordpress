@@ -32,6 +32,7 @@ export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
+import { KeypadModule } from './app/shared/native/keyboard/keypad.module';
 defineCustomElements(window);
 
 if (environment.production) {
@@ -61,6 +62,7 @@ bootstrapApplication(AppComponent, {
     }),
     importProvidersFrom(BrowserAnimationsModule),
     importProvidersFrom(HttpClientModule),
+    importProvidersFrom(KeypadModule),
     importProvidersFrom(
       TranslateModule.forRoot({
         loader: {

@@ -10,12 +10,16 @@ import { AuthState } from 'src/app/store/auth/auth.state';
 import { LoginPayload } from 'src/app/shared/wooApi';
 import { AuthActions } from 'src/app/store/auth/auth.actions';
 import { Observable, Subject, takeUntil } from 'rxjs';
+import { scaleHeight } from 'src/app/shared/animations/animations';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
+  animations: [
+    scaleHeight()
+  ],
   imports: [
     IonicModule,
     CommonModule,
