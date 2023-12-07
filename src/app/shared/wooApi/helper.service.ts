@@ -1,26 +1,28 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
+import { Store } from '@ngxs/store';
+import { ErrorLoggingActions } from 'src/app/store/errors-logging/errors-logging.actions';
 
 @Injectable({
   providedIn: 'root'
 })
-export class  WoocommerceHelperService {
-  constructor() { }
+export class WoocommerceHelperService {
 
+  private store = inject(Store);
 
   handleError(error: HttpErrorResponse): Observable<any> {
     if (error.error instanceof ErrorEvent) {
-      // A client-side or network error occurred. Handle it accordingly.
-      console.error('An error occurred:', error.error);
+      this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(error));
     } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
-        console.log('Backend response', error);
-        return throwError(error.error);
+      this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(error));
+      return new Observable(obs => obs.error(error.error));
     }
     // return an observable with a user-facing error message
-    return throwError({message: 'Something bad happened; please try again later.'});
+    return new Observable(obs => obs.error({
+      message: 'Something bad happened; please try again later.'
+    }));
+
   }
 
   includeQuery(query: any = {}): any {
@@ -36,7 +38,6 @@ export class  WoocommerceHelperService {
     Object.keys(query).forEach((key) => {
       params.append(key, query[key]);
     });
-    console.log(params);
     return params;
   }
 

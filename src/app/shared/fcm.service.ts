@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { PushNotifications } from '@capacitor/push-notifications';
+import { PushNotifications, Token } from '@capacitor/push-notifications';
 
 import { NavigationService } from './utils/navigation.service';
 import { UserProfileActions } from '../store/settings/settings.actions';
@@ -10,6 +10,9 @@ import { catchError } from 'rxjs';
 import { WoocommerceHelperService } from './wooApi';
 import { ModalController } from '@ionic/angular';
 import { FcmModalComponent } from '../components/fcm-modal/fcm-modal.component';
+import { environment } from 'src/environments/environment';
+import { ErrorLoggingActions } from '../store/errors-logging/errors-logging.actions';
+import { Platform } from '@ionic/angular';
 
 export interface INotifcationPayload {
     id: string;
@@ -38,17 +41,16 @@ export class FcmService {
 
     private modalCtrl = inject(ModalController);
 
+    public platform = inject(Platform);
 
     async listenersPushInit() {
-        await PushNotifications.addListener('registration', token => {
+        await PushNotifications.addListener('registration', (token: Token) => {
             try {
-                if (token.value) {
-                    console.info('Registration token: ', token.value);
-                    // this.utility.presentAlert(token.value);
-                    this.store.dispatch(new UserProfileActions.SetFcmToken(token.value));
+                if (token) {
+                    this.store.dispatch(new UserProfileActions.SetFcmToken(token));
                 }
             } catch (e: any) {
-                console.error('Registration error: ', e.error);
+                this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(e));
             }
         });
 
@@ -89,22 +91,26 @@ export class FcmService {
         modal.present();
     }
 
-    async requestPermission() {
-        // Request permission to use push notifications
-        // iOS will prompt user and return if they granted permission or not
-        // Android will just grant without prompting
-        await PushNotifications.requestPermissions()
-            .then(async (result) => {
-                if (result.receive === 'granted') {
-                    // Register with Apple / Google to receive push via APNS/FCM
-                    await PushNotifications.register();
-                    // console.log(res);
-                } else {
-                    // Show some error
-                    throw new Error('Error FCM');
-                }
-            });
-    }
+    // requestPermission() {
+    //     if (this.platform.is('hybrid')) {
+    //         if (this.platform.is('android') || this.platform.is('ios')) {
+    //             // Request permission to use push notifications
+    //             // iOS will prompt user and return if they granted permission or not
+    //             // Android will just grant without prompting
+    //             return PushNotifications.requestPermissions()
+    //                 .then(async (result) => {
+    // if (result.receive === 'granted') {
+    //     // Register with Apple / Google to receive push via APNS/FCM
+    //     return PushNotifications.register();
+    //     // console.log(res);
+    // } else {
+    //                         // Show some error
+    //                         return new Error('Error FCM');
+    //                     }
+    //                 });
+    //         }
+    //     }
+    // }
 
     async getDeviceId(): Promise<DeviceId> {
         return Device.getId();
@@ -119,22 +125,28 @@ export class FcmService {
         const deviceInfo = await Device.getInfo();
 
         const payload = {
-            // (required)
-            rest_api_key: '4121560q6r.1892767n:72o094o4o60s98nqs:5o5p947ss08so28oo0q7n4o43',
-            // (required)
+            rest_api_key: environment.fcm_rest_api_key,
             device_uuid: deviceId.identifier,
-            // (required)
             device_token: fcmToken,
-            // (required) - This would be the category in which the device is registered, if there is no category exists in WordPress it’ll be created automatically.
             subscription: 'promotions',
-            // (optional)
             device_name: deviceInfo.name,
-            // (optional)
             os_version: deviceInfo.osVersion,
         }
 
         return this.httpClient.post(`wp-json/fcm/pn/subscribe/`, this.wooHelper.includeEncoded(payload))
             .pipe(catchError(err => this.wooHelper.handleError(err))).subscribe((res) => console.log(res));
+
+    }
+
+    async postUnSubscribeData() {
+        const deviceId = await Device.getId();
+        const payload = {
+            rest_api_key: environment.fcm_rest_api_key,
+            device_uuid: deviceId.identifier,
+        }
+        return this.httpClient.post(`wp-json/fcm/pn/unsubscribe/`, this.wooHelper.includeEncoded(payload))
+            .pipe(catchError(err => this.wooHelper.handleError(err)))
+            .subscribe((res) => console.log(res));
 
     }
 
@@ -150,7 +162,11 @@ export class FcmService {
             throw new Error(message);
         }
 
-        await PushNotifications.register();
+        const result: any = await PushNotifications.requestPermissions();
+        if (result.receive === 'granted') {
+            // Register with Apple / Google to receive push via APNS/FCM
+            return PushNotifications.register();
+        }
     }
 
     async getDeliveredNotifications() {

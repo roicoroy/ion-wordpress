@@ -4,8 +4,7 @@ import { Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthState } from 'src/app/store/auth/auth.state';
 import { AuthActions } from '../store/auth/auth.actions';
-import { UserProfileActions } from '../store/settings/settings.actions';
-import { UserProfileState } from '../store/settings/settings.state';
+import { SettingsState } from '../store/settings/settings.state';
 
 export interface ISeetingsFacadeState {
     isLoggedIn: boolean,
@@ -19,7 +18,7 @@ export class SettingsFacade {
 
     @Select(AuthState.isLoggedIn) isLoggedIn$!: Observable<boolean>;
 
-    @Select(UserProfileState.getFcmToken) fcmToken$!: Observable<string>;
+    @Select(SettingsState.getFcmToken) fcmToken$!: Observable<string>;
 
     private store = inject(Store);
 
@@ -61,7 +60,7 @@ export class SettingsFacade {
         // return this.store.dispatch(new UserProfileActions.UpdateDarkMode(isDarkMode))
     }
 
-    setFCMStatus(pushAccepted: boolean) {
-        return this.store.dispatch(new UserProfileActions.UpdateFcmAccepted(pushAccepted))
-    }
+    // setFCMStatus(pushAccepted: boolean) {
+        
+    // }
 }

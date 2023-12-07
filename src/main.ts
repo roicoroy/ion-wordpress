@@ -9,7 +9,7 @@ import { environment } from './environments/environment';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { WooInterceptor } from './app/shared/woo.interceptor';
+import { WooInterceptor } from './app/shared/wooApi/woo.interceptor';
 
 import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
@@ -33,7 +33,7 @@ export function createTranslateLoader(http: HttpClient) {
 }
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
 import { KeypadModule } from './app/shared/native/keyboard/keypad.module';
-import { UserProfileState } from './app/store/settings/settings.state';
+import { SettingsState } from './app/store/settings/settings.state';
 import { ErrorsLoggingState } from './app/store/errors-logging/errors-logging.state';
 defineCustomElements(window);
 
@@ -78,7 +78,7 @@ bootstrapApplication(AppComponent, {
       AuthState,
       CustomerState,
       ProductsState,
-      UserProfileState,
+      SettingsState,
       ErrorsLoggingState
     ], {
       developmentMode: false,

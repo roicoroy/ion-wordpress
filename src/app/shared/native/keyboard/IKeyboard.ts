@@ -2,7 +2,6 @@ import { EventEmitter } from '@angular/core';
 import { KeyboardInfo } from '@capacitor/keyboard';
 
 export interface IKeyboardService {
-     
     keyboardWillShow: EventEmitter<KeyboardInfo>;
 
     /**

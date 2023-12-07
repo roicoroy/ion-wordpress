@@ -14,11 +14,12 @@ import { ILanguageModel } from '../shared/language/language.model';
 import { ISeetingsFacadeState, SettingsFacade } from './settngs.facade';
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
-import { NgxsModule } from '@ngxs/store';
+import { NgxsModule, Store } from '@ngxs/store';
 import { ImagePickerComponent, onLoadImage } from '../components/image-picker/image-picker.component';
 import { KeypadModule } from '../shared/native/keyboard/keypad.module';
 import { Capacitor } from '@capacitor/core';
 import { FcmService } from '../shared/fcm.service';
+import { UserProfileActions } from '../store/settings/settings.actions';
 
 @Component({
   selector: 'app-settings',
@@ -62,6 +63,8 @@ export class SettingsPage implements OnInit, OnDestroy {
 
   userAvatar!: string;
 
+  viewState$: Observable<ISeetingsFacadeState>;
+
   private platform = inject(Platform);
 
   private alert = inject(AlertController);
@@ -74,7 +77,7 @@ export class SettingsPage implements OnInit, OnDestroy {
 
   private fcmService = inject(FcmService);
 
-  viewState$: Observable<ISeetingsFacadeState>;
+  private store = inject(Store);
 
   constructor(
     private theme: ThemeService,
@@ -91,13 +94,6 @@ export class SettingsPage implements OnInit, OnDestroy {
     });
   }
 
-  getTranslations() {
-    this.translate.getTranslation(this.translate.currentLang)
-      .subscribe((translations) => {
-        this.translations = translations;
-      });
-  }
-
   ionViewWillEnter() {
     this.ionStorage.getKeyAsObservable('userAvatar')
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -109,23 +105,25 @@ export class SettingsPage implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.ionStorage.getKeyAsObservable('pushAccepted')
-      .pipe()
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((isPushAccepted: boolean) => {
         this.pushAcceptedModel = isPushAccepted;
       });
 
     this.ionStorage.getKeyAsObservable(DARK_MODE)
-      .pipe()
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((isDarkMode: boolean) => {
         this.isDarkMode = isDarkMode;
       });
 
     this.settingsForm.controls[DARK_MODE].valueChanges
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((isDarkMode: boolean) => {
         this.isDarkMode = isDarkMode;
       });
 
     this.settingsForm.controls['pushAccepted'].valueChanges
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((isPushAccepted: boolean) => {
         this.pushAcceptedModel = isPushAccepted;
         this.ionStorage.storageSet('pushAccepted', this.pushAcceptedModel)
@@ -161,13 +159,21 @@ export class SettingsPage implements OnInit, OnDestroy {
 
   async onFCMChange($event: any) {
     this.pushAccepted = $event.detail.checked;
-    this.facade.setFCMStatus(this.pushAccepted);
-    this.fcmService.requestPermission();
+    return this.store.dispatch(new UserProfileActions.UpdateFcmAccepted(this.pushAccepted));
+    // this.fcmService.requestPermission();
   }
 
   postMockSubscribeData(fcmToken: string) {
     this.fcmService.postSubscribeData(fcmToken);
   }
+  
+  postMockUnSubscribeData(fcmToken: string) {
+    this.fcmService.postSubscribeData(fcmToken);
+  }
+  
+  // postSubscribeData(fcmToken: string) {
+  //   this.fcmService.postSubscribeData(fcmToken);
+  // }
 
   onDarkModeChange($event: any) {
     this.isDarkMode = $event.detail.checked;

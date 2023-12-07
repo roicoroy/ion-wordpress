@@ -5,7 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { LoadingController, AlertController } from '@ionic/angular';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { catchError, of, map, Subject } from 'rxjs';
-import { WordpressService, } from 'src/app/shared/wordpress.service';
+import { WordpressService, } from 'src/app/shared/wordpress/wordpress.service';
 import { AuthService } from 'src/app/shared/wooApi';
 import { jarallax } from "jarallax";
 

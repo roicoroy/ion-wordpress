@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { WordpressService } from 'src/app/shared/wordpress.service';
+import { WordpressService } from 'src/app/shared/wordpress/wordpress.service';
 
 @Injectable({
     providedIn: 'root'

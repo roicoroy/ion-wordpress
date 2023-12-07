@@ -56,7 +56,7 @@ export class LoginPage implements OnInit, OnDestroy {
     public router: Router,
   ) {
     this.loginForm = new FormGroup({
-      'email': new FormControl('Ayumi@email.com', Validators.compose([
+      'email': new FormControl('yumi@email.com', Validators.compose([
         Validators.required,
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
       ])),

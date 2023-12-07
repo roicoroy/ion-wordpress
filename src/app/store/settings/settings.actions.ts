@@ -1,4 +1,5 @@
 import { Form } from "@angular/forms";
+import { Token } from "@capacitor/push-notifications";
 
 export namespace UserProfileActions {
     export class UpdateDarkMode {
@@ -7,18 +8,10 @@ export namespace UserProfileActions {
     }
     export class UpdateFcmAccepted {
         public static readonly type = '[UserProfileActions] Update Fcm Accepted';
-        constructor(public readonly fcmAccepted: boolean) { }
+        constructor(public readonly fcmAccepted: boolean, public readonly channel?: string) { }
     }
     export class SetFcmToken {
         public static readonly type = '[UserProfileActions] Set Fcm Token';
-        constructor(public readonly fcmToken: string) { }
-    }
-    export class UpdateStrapiUser {
-        public static readonly type = '[UserProfileActions] Update Strapi User';
-        constructor(public readonly userForm: Form) { }
-    }
-    export class UploadImage {
-        public static readonly type = '[UserProfileActions] Upload Image';
-        constructor(public readonly imageForm: FormData) { }
+        constructor(public readonly fcmToken: Token) { }
     }
 }

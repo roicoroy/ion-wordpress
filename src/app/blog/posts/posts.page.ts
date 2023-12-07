@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { WordpressService } from 'src/app/shared/wordpress.service';
+import { WordpressService } from 'src/app/shared/wordpress/wordpress.service';
 
 @Component({
   selector: 'app-posts',

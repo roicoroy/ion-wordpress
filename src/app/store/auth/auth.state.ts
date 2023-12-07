@@ -1,11 +1,13 @@
 import { Injectable, inject } from "@angular/core";
 import { Action, Selector, State, StateContext, Store } from "@ngxs/store";
 import { AuthService, CreateNonceRes } from "src/app/shared/wooApi";
-import { tap, catchError, Observable } from "rxjs";
+import { tap, catchError, Observable, from } from "rxjs";
 import { AuthActions } from "./auth.actions";
 import { IStoreSnapshoModel } from "../store.snapshot.interface";
 import { IonStorageService } from "src/app/shared/utils/ionstorage.service";
 import { ErrorLoggingActions } from "../errors-logging/errors-logging.actions";
+import { RegisterUserInterface, SimpleJwtLogin } from "src/app/shared/wordpress/wordpress-simple-jwt-login";
+import { environment } from "src/environments/environment";
 
 export interface IUserResponseModel {
     token: string | null;
@@ -62,45 +64,7 @@ export class AuthState {
     */
     @Action(AuthActions.Register)
     register(ctx: StateContext<IAuthStateModel>, { registerData }: AuthActions.Register) {
-        const stateUser = this.store.selectSnapshot((state: IStoreSnapshoModel) => state.auth.user);
-        if (stateUser.token) {
-            this.wooApi.doRegister(registerData, stateUser.token)
-                .pipe(
-                    catchError(e => {
-                        ctx.patchState({
-                            isLoggedIn: false
-                        });
-                        this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(e));
-                        return new Observable(obs => obs.error(e));
-                    })
-                )
-                .subscribe(async (res: IUserResponseModel) => {
-                    console.log('registerData', res);
-                    await this.wooApi.setUser({
-                        token: res?.token,
-                        user_display_name: res?.user_display_name,
-                        user_email: res?.user_email,
-                        user_nicename: res?.user_nicename,
-                    });
-                    return ctx.patchState({
-                        user: {
-                            token: res?.token,
-                            user_display_name: res?.user_display_name,
-                            user_email: res?.user_email,
-                            user_nicename: res?.user_nicename,
-                        },
-                        isLoggedIn: true
-                    });
-                });
-        }
-    }
-
-    /* 
-     * Do Login
-    */
-    @Action(AuthActions.DoLogin)
-    async doLogin(ctx: StateContext<IAuthStateModel>, { data }: AuthActions.DoLogin) {
-        this.wooApi.doLogin(data.username, data.password)
+        this.wooApi.register(registerData)
             .pipe(
                 catchError(e => {
                     ctx.patchState({
@@ -110,7 +74,8 @@ export class AuthState {
                     return new Observable(obs => obs.error(e));
                 })
             )
-            .subscribe(async (res: any) => {
+            .subscribe(async (res: IUserResponseModel) => {
+                console.log('registerData', res);
                 await this.wooApi.setUser({
                     token: res?.token,
                     user_display_name: res?.user_display_name,
@@ -127,6 +92,20 @@ export class AuthState {
                     isLoggedIn: true
                 });
             });
+
+        const stateUser = this.store.selectSnapshot((state: IStoreSnapshoModel) => state.auth.user);
+        if (stateUser.token) {
+        }
+    }
+
+    /* 
+     * Do Login
+    */
+    @Action(AuthActions.DoLogin)
+    async doLogin(ctx: StateContext<IAuthStateModel>, { data }: AuthActions.DoLogin) {
+        return this.wooApi.login(data.username, data.password).subscribe((res) => {
+            console.log(res);
+        });
     }
 
     /* 
