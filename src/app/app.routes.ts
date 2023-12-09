@@ -5,7 +5,7 @@ import { PostResolver } from './blog/post/post.resolver';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'nd-graphics',
+    redirectTo: 'login',
     pathMatch: 'full',
   },
   {

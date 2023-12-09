@@ -8,10 +8,11 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { PasswordValidator } from 'src/app/shared/form-validators/password.validator';
 import { ModalController, MenuController } from '@ionic/angular/standalone';
 import { ShowHidePasswordComponent } from 'src/app/components/show-hide-password/show-hide-password.component';
-import { RegisterPayload } from 'src/app/shared/wooApi';
+import { LoginPayload, RegisterPayload, RegisterWpUserPayload, WordpressWpUserResponsePayload } from 'src/app/shared/wooApi';
 import { Store } from '@ngxs/store';
 import { Subject, takeUntil } from 'rxjs';
 import { AuthActions } from 'src/app/store/auth/auth.actions';
+import { IStoreSnapshoModel } from 'src/app/store/store.snapshot.interface';
 
 @Component({
   selector: 'app-register',
@@ -73,11 +74,11 @@ export class RegisterPage implements OnInit, OnDestroy {
     });
 
     this.signupForm = new FormGroup({
-      'email': new FormControl('test@email.com', Validators.compose([
+      'email': new FormControl('hellso@email.com', Validators.compose([
         Validators.required,
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
       ])),
-      'username': new FormControl('test', Validators.compose([
+      'username': new FormControl('words', Validators.compose([
         Validators.required
       ])),
       'matching_passwords': this.matching_passwords_group
@@ -86,6 +87,36 @@ export class RegisterPage implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.menu.enable(false);
+  }
+
+  register(): void {
+    // console.log('do sign up');
+    console.log(this.signupForm.value);
+    const payload: RegisterWpUserPayload = {
+      username: this.signupForm.value.username,
+      email: this.signupForm.value.email,
+      password: this.signupForm.value.matching_passwords.confirm_password,
+    }
+    this.store.dispatch(new AuthActions.Register(payload))
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((state: IStoreSnapshoModel) => {
+        console.log(state);
+        if (state.auth.resgistrationResponseCode === 200) {
+          // const loginPaylod: LoginPayload = {
+          //   username: this.signupForm.value.email,
+          //   password: this.signupForm.value.password,
+          // };
+          // this.store.dispatch(new AuthActions.DoLogin(loginPaylod))
+          //   .pipe(takeUntil(this.ngUnsubscribe))
+          //   .subscribe((vs) => {
+          //     console.log(vs);
+          //     this.router.navigate(['/product-list']);
+          //   });
+        }
+        if (state.auth.resgistrationResponseCode === 400) {
+
+        }
+      });
   }
 
   async showTermsModal() {
@@ -102,25 +133,6 @@ export class RegisterPage implements OnInit, OnDestroy {
     return await modal.present();
   }
 
-  doSignup(): void {
-    // console.log('do sign up');
-    // console.log(this.signupForm.value);
-    const payload: RegisterPayload = {
-      username: '',
-      email: ' string;',
-      user_pass: 'string;',
-      nonce: ' string;',
-      display_name: ' string;',
-      notify: ' string;',
-    }
-    this.store.dispatch(new AuthActions.Register(payload))
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((res) => {
-        console.log(res);
-        // this.router.navigate(['/product-list']);
-      });
-    // this.router.navigate(['app/categories']);
-  }
   ngOnDestroy(): void {
     this.ngUnsubscribe.next(null);
     this.ngUnsubscribe.complete();

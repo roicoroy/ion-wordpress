@@ -4,7 +4,7 @@
       <ion-content no-bounce has-bouncing="false" forceOverscroll="false">
         <ion-list id="inbox-list" *ngIf="viewState$ | async as vs">
 
-          <ion-list-header *ngIf="vs.user.user_email && vs.user.user_display_name; else notLogged">
+          <ion-list-header *ngIf="vs.user?.user_email && vs.user?.user_display_name; else notLogged">
             {{ vs.user.user_email }}
           </ion-list-header>
           <ion-note>Hello {{ vs.user.user_display_name }}</ion-note>

@@ -35,6 +35,17 @@ export interface RegisterPayload {
   notify?: string;
 }
 
+export interface RegisterWpUserPayload {
+  username: string;
+  email: string;
+  password?: string;
+}
+
+export interface WordpressWpUserResponsePayload {
+  code: number
+  message: string;
+}
+
 export interface RegisterRsponse {
   cookie: string;
   status: string;
@@ -42,6 +53,6 @@ export interface RegisterRsponse {
 }
 
 export interface LoginPayload {
-  username: string;
-  password: string;
+  username?: string | any;
+  password?: string | any;
 }

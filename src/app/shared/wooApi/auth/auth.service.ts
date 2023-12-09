@@ -37,29 +37,7 @@ export class AuthService {
   }
 
   register(registerData?: RegisterPayload): Observable<any> {
-    const postMockData = {
-      // username: 'test1',
-      email: 'test1@email.com',
-      password: 'Rwbento123!'
-    }
-    const payload = this.wooHelper.includeEncoded(postMockData);
-    return this.httpClient.post('wp-json/jwt-auth/v1/register', payload)
-      .pipe(catchError(err => this.wooHelper.handleError(err)));
-    // return this.httpClient.post('wp-json/wp/v2/users', payload)
-    //   .pipe(catchError(err => this.wooHelper.handleError(err)));
-  }
-
-
-  doRegister(userData?: any, token?: string | any) {
-    let header: HttpHeaders;
-    const postMockData = {
-      username: 'test1',
-      email: 'test1@email.com',
-      password: 'Rwbento123!'
-    }
-    // header = new HttpHeaders({ "Authorization": "Bearer " + token });
-    header = new HttpHeaders({});
-    return this.http.post('?rest_route=/simple-jwt-login/v1/auth', postMockData, { headers: header })
+    return this.httpClient.post('wp-json/wp/v2/users/register/', registerData)
       .pipe(catchError(err => this.wooHelper.handleError(err)));
   }
 

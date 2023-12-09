@@ -12,5 +12,6 @@ export const environment = {
   wordpress: {
     api_url: 'wp-json/wp/v2/',
     auth_url: 'wp-json/jwt-auth/v1/token'
-  }
+  },
+  aplication_password: 'qOOD oyfZ bd53 kJ6u J6QE 9KRK'
 };

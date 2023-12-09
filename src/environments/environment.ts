@@ -13,5 +13,9 @@ export const environment = {
   wordpress: {
     api_url: 'wp-json/wp/v2/',
     auth_url: 'wp-json/jwt-auth/v1/token'
-  }
+  },
+  // Your new password for ionic-auth is: 
+  aplication_password: 'qOOD oyfZ bd53 kJ6u J6QE 9KRK',
+  admin_username: 'roicoroy',
+  admin_password: 'Rwbento123!',
 };

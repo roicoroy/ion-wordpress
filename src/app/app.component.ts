@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { IonApp, IonSplitPane, IonMenu, IonContent, IonList, IonListHeader, IonNote, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterOutlet } from '@ionic/angular/standalone';
 import { Store } from '@ngxs/store';
 import { addIcons } from 'ionicons';
@@ -44,6 +44,8 @@ export class AppComponent implements OnInit, OnDestroy {
   viewState$!: Observable<IAppFacadeModel>;
 
   private store = inject(Store);
+  
+  private router = inject(Router);
 
   private facade = inject(AppFacade);
 
@@ -60,9 +62,11 @@ export class AppComponent implements OnInit, OnDestroy {
   private readonly ngUnsubscribe = new Subject();
 
   constructor() {
-    this.viewState$ = this.facade.viewState$;
   }
 
+  ionViewDidEnter() {
+    this.viewState$ = this.facade.viewState$;
+  }
   async ngOnInit() {
     await this.appInit();
   }
@@ -70,11 +74,11 @@ export class AppComponent implements OnInit, OnDestroy {
   async appInit() {
     try {
       this.iconsInit();
-      
+
       this.language.initTranslate();
-      
+
       this.theme.themeInit();
-      
+
       if (this.platform.is('hybrid')) {
         if (this.platform.is('android') || this.platform.is('ios')) {
           // this.keyboardService.setAccessoryBarVisible(true).catch(() => { });
@@ -94,6 +98,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   logout() {
     this.store.dispatch(new AuthActions.AuthLogout());
+    this.router.navigateByUrl('login')
   }
 
   iconsInit() {
