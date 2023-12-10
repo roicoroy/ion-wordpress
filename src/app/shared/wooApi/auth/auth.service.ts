@@ -35,8 +35,8 @@ export class AuthService {
   }
 
   register(registerData?: RegisterPayload): Observable<any> {
-    return this.httpClient.post('wp-json/wp/v2/users/register/', registerData)
-      .pipe(catchError(err => this.wooHelper.handleError(err)));
+    return this.httpClient.post('wp-json/wp/v2/users/register/', registerData);
+      // .pipe(catchError(err => this.wooHelper.handleError(err)));
   }
 
   login(username: string, password: string) {
@@ -48,15 +48,16 @@ export class AuthService {
     return this.http.post(url, {
       username,
       password
-    }, { headers: header })
-      .pipe(catchError(err => this.wooHelper.handleError(err)));
+    }, { headers: header });
+      // .pipe(catchError(err => this.wooHelper.handleError(err)));
   }
 
   retrievePassword(username: string): Observable<any> {
     // const payload = this.wooHelper.includeEncoded({ username: username });
     return this.httpClient.post(`wp-json/wp/v2/users/lostpassword/`, {
       user_login: username
-    }).pipe(catchError(err => this.wooHelper.handleError(err)));
+    });
+    // .pipe(catchError(err => this.wooHelper.handleError(err)));
   }
 
   getAuthToken(payload: LoginPayload): Observable<any> {

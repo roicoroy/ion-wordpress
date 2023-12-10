@@ -1,24 +1,27 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Router, RouterLink } from '@angular/router';
 import { MenuController } from '@ionic/angular/standalone';
 import { ShowHidePasswordComponent } from 'src/app/components/show-hide-password/show-hide-password.component';
-import { Select, Store } from '@ngxs/store';
-import { AuthState } from 'src/app/store/auth/auth.state';
+import { Store } from '@ngxs/store';
 import { LoginPayload } from 'src/app/shared/wooApi';
 import { AuthActions } from 'src/app/store/auth/auth.actions';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { scaleHeight } from 'src/app/shared/animations/animations';
-import { ILoginFacadeState, LoginFacade } from './login.facade';
+import { AuthFacade, ILoginFacadeState } from '../auth.facade';
 import { ModalService } from 'src/app/shared/utils/modal.service';
+import { AuthHeaderComponent } from 'src/app/components/auth-header/auth-header.component';
+import { IAuthHeader } from '../interfaces';
+import { KeypadModule } from 'src/app/shared/native/keyboard/keypad.module';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
+  styleUrls: ['../auth.styles.scss'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     scaleHeight()
   ],
@@ -28,10 +31,20 @@ import { ModalService } from 'src/app/shared/utils/modal.service';
     FormsModule,
     ReactiveFormsModule,
     RouterLink,
-    ShowHidePasswordComponent
+    ShowHidePasswordComponent,
+    AuthHeaderComponent,
+    KeypadModule
   ],
 })
 export class LoginPage implements OnInit, OnDestroy {
+
+  authHeader: IAuthHeader = {
+    image: 'assets/shapes.svg',
+    title: 'Welcome',
+    subtitle: 'Login to start'
+  }
+
+  pageTitle = 'Login';
 
   loginForm: FormGroup;
 
@@ -48,7 +61,7 @@ export class LoginPage implements OnInit, OnDestroy {
 
   viewState$: Observable<ILoginFacadeState>;
 
-  private facade = inject(LoginFacade);
+  private facade = inject(AuthFacade);
 
   private modalService = inject(ModalService);
 
@@ -68,7 +81,7 @@ export class LoginPage implements OnInit, OnDestroy {
         Validators.required,
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
       ])),
-      'password': new FormControl('Rwbento123!', Validators.compose([
+      'password': new FormControl('Rwbento123!!', Validators.compose([
         Validators.minLength(5),
         Validators.required
       ]))
@@ -84,9 +97,6 @@ export class LoginPage implements OnInit, OnDestroy {
       username: this.loginForm.value.email,
       password: this.loginForm.value.password,
     };
-
-    console.log(loginPaylod);
-
     this.store.dispatch(new AuthActions.Login(loginPaylod));
   }
 

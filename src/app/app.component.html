@@ -7,7 +7,10 @@
           <ion-list-header *ngIf="vs.user?.user_email && vs.user?.user_display_name; else notLogged">
             {{ vs.user.user_email }}
           </ion-list-header>
-          <ion-note>Hello {{ vs.user.user_display_name }}</ion-note>
+
+          <ion-note *ngIf="vs.user?.user_email && vs.user?.user_display_name">
+            Hello {{ vs.user.user_display_name }}
+          </ion-note>
 
           <ng-template #notLogged>
             <ion-list-header>
@@ -16,15 +19,18 @@
             <ion-note>{{ 'Please register and login.' }}</ion-note>
           </ng-template>
 
-          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
-            <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false"
-              routerLinkActive="selected">
-              <ion-icon aria-hidden="true" slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
-              <ion-label>{{ p.title }}</ion-label>
-            </ion-item>
-          </ion-menu-toggle>
-          
-          <ion-menu-toggle auto-hide="false">
+          <div *ngIf="vs.isLoggedIn">
+            <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
+              <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false"
+                routerLinkActive="selected">
+                <ion-icon aria-hidden="true" slot="start" [ios]="p.icon + '-outline'"
+                  [md]="p.icon + '-sharp'"></ion-icon>
+                <ion-label>{{ p.title }}</ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+          </div>
+
+          <ion-menu-toggle auto-hide="false" *ngIf="!vs.isLoggedIn; else notLoggedIn">
             <ion-item routerDirection="root" [routerLink]="['login']" lines="none" detail="false"
               routerLinkActive="selected">
               <ion-label>
@@ -32,15 +38,17 @@
               </ion-label>
             </ion-item>
           </ion-menu-toggle>
-          
-          <ion-menu-toggle auto-hide="false">
-            <ion-item (click)="logout()">
-              <ion-label>
-                {{ 'Logout' }}
-              </ion-label>
-            </ion-item>
-          </ion-menu-toggle>
-          
+
+          <ng-template #notLoggedIn>
+            <ion-menu-toggle auto-hide="false">
+              <ion-item (click)="logout()">
+                <ion-label>
+                  {{ 'Logout' }}
+                </ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+          </ng-template>
+
         </ion-list>
       </ion-content>
     </ion-menu>

@@ -18,7 +18,7 @@ export class AppFacade {
 
     @Select(AuthState.isLoggedIn) isLoggedIn$!: Observable<boolean>;
 
-    @Select(AuthState.getUser) user$!: Observable<IUserResponseModel | any>;
+    @Select(AuthState.getUser) user$!: Observable<IUserResponseModel>;
 
     readonly viewState$: Observable<any>;
 
@@ -32,11 +32,11 @@ export class AppFacade {
             .pipe(
                 map((
                     isLoggedIn,
-                    user,
-                ) => ({
-                    isLoggedIn,
-                    user: user
-                }))
+                ) => (
+                    {
+                        isLoggedIn: isLoggedIn[0],
+                        user: isLoggedIn[1]
+                    }))
             );
     }
 }

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
@@ -10,22 +10,40 @@ import { AuthActions } from 'src/app/store/auth/auth.actions';
 import { ErrorLoggingActions } from 'src/app/store/errors-logging/errors-logging.actions';
 import { IStoreSnapshoModel } from 'src/app/store/store.snapshot.interface';
 import { AlertService } from 'src/app/shared/utils/alert.service';
+import { ModalService } from 'src/app/shared/utils/modal.service';
+import { AuthHeaderComponent } from 'src/app/components/auth-header/auth-header.component';
+import { IAuthHeader } from '../interfaces';
+import { KeypadModule } from 'src/app/shared/native/keyboard/keypad.module';
+import { scaleHeight } from 'src/app/shared/animations/animations';
 
 @Component({
   selector: 'app-forgot-password',
   templateUrl: './forgot-password.page.html',
-  styleUrls: ['./forgot-password.page.scss'],
+  styleUrls: ['../auth.styles.scss'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    scaleHeight()
+  ],
   imports: [
     IonicModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     RouterLink,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AuthHeaderComponent,
+    KeypadModule
   ]
 })
 export class ForgotPasswordPage implements OnInit, OnDestroy {
+  
+  authHeader: IAuthHeader = {
+    image: 'assets/shapes.svg',
+    title: 'Forgot password?',
+    subtitle: 'Add your username and we will email the reset link to you.'
+  }
+  pageTitle = 'Forgot Password';
 
   forgotPasswordForm!: FormGroup;
 
@@ -38,6 +56,8 @@ export class ForgotPasswordPage implements OnInit, OnDestroy {
   private store = inject(Store);
 
   private alert = inject(AlertService);
+
+  private modalService = inject(ModalService);
 
   private readonly ngUnsubscribe = new Subject();
 
@@ -65,11 +85,19 @@ export class ForgotPasswordPage implements OnInit, OnDestroy {
         })
       )
       .subscribe((vs: IStoreSnapshoModel) => {
-        console.log(vs);
+        console.log(vs.auth.retrievePasswordResponseCode);
         if (vs.auth.retrievePasswordResponseCode === 200) {
-          this.alert.presentSimpleAlert(vs.auth.retrievePasswordResponseMessage, 'login');
+          this.alert.presentSimpleAlertNavigate(vs.auth.retrievePasswordResponseMessage, 'login');
         }
       });
+  }
+
+  async showTermsModal() {
+    await this.modalService.showPrivacyModal();
+  }
+
+  async showPrivacyModal() {
+    await this.modalService.showPrivacyModal();
   }
 
   ngOnDestroy(): void {

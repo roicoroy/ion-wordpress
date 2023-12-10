@@ -35,6 +35,8 @@ import { defineCustomElements } from '@ionic/pwa-elements/loader';
 import { KeypadModule } from './app/shared/native/keyboard/keypad.module';
 import { SettingsState } from './app/store/settings/settings.state';
 import { ErrorsLoggingState } from './app/store/errors-logging/errors-logging.state';
+import { fadeOutAnimation } from './app/shared/animations/nav-animation';
+import { KeyboardState } from './app/store/keyboard/keyboard.state';
 defineCustomElements(window);
 
 if (environment.production) {
@@ -60,7 +62,7 @@ bootstrapApplication(AppComponent, {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular({
       mode: 'ios',
-      // navAnimation: fadeOutAnimation
+      navAnimation: fadeOutAnimation
     }),
     importProvidersFrom(BrowserAnimationsModule),
     importProvidersFrom(HttpClientModule),
@@ -79,7 +81,8 @@ bootstrapApplication(AppComponent, {
       CustomerState,
       ProductsState,
       SettingsState,
-      ErrorsLoggingState
+      ErrorsLoggingState,
+      KeyboardState
     ], {
       developmentMode: false,
     }
@@ -94,7 +97,8 @@ bootstrapApplication(AppComponent, {
         'customer',
         'products',
         'settings',
-        'errors'
+        'errors',
+        'keyboard'
       ]
     })),
     importProvidersFrom(NgxsFormPluginModule.forRoot()),

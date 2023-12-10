@@ -1,4 +1,4 @@
-import { Injectable, inject } from "@angular/core";
+import { Injectable, OnDestroy, inject } from "@angular/core";
 import { Action, Selector, State, StateContext, Store } from "@ngxs/store";
 import { AuthService, CreateNonceRes, LoginPayload, UserResponse, WordpressWpUserResponsePayload } from "src/app/shared/wooApi";
 import { tap, catchError, Observable, Subject, takeUntil } from "rxjs";
@@ -7,6 +7,8 @@ import { IStoreSnapshoModel } from "../store.snapshot.interface";
 import { IonStorageService } from "src/app/shared/utils/ionstorage.service";
 import { ErrorLoggingActions } from "../errors-logging/errors-logging.actions";
 import { Router } from "@angular/router";
+import { AlertService } from "src/app/shared/utils/alert.service";
+import { LoadingService } from "src/app/shared/utils/loading.service";
 
 export interface IUserResponseModel {
     token: string | null;
@@ -20,6 +22,8 @@ export interface IAuthStateModel {
     isLoggedIn: boolean,
     retrievePasswordResponseCode: number,
     retrievePasswordResponseMessage: string,
+    registerPasswordResponseCode: number,
+    registerPasswordResponseMessage: string,
 }
 
 @State<IAuthStateModel>({
@@ -37,7 +41,7 @@ export interface IAuthStateModel {
 @Injectable({
     providedIn: 'root'
 })
-export class AuthState {
+export class AuthState implements OnDestroy {
 
     private store = inject(Store);
 
@@ -46,6 +50,10 @@ export class AuthState {
     private wooApi = inject(AuthService);
 
     private ionStorage = inject(IonStorageService);
+
+    private alertService = inject(AlertService);
+
+    private loadingService = inject(LoadingService);
 
     private readonly ngUnsubscribe = new Subject();
 
@@ -72,21 +80,25 @@ export class AuthState {
         this.wooApi.register(registerData)
             .pipe(
                 takeUntil(this.ngUnsubscribe),
-                catchError(e => {
+                catchError((e: any) => {
                     ctx.patchState({
-                        isLoggedIn: false
+                        isLoggedIn: false,
+                        registerPasswordResponseCode: e.code,
+                        registerPasswordResponseMessage: e.message
                     });
-                    this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(e));
+                    const error = new Error(e.message);
+                    this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(error));
+                    this.alertService.presentSimpleAlert(e.error.message);
                     return new Observable(obs => obs.error(e));
                 })
             )
-            .subscribe(async (response: WordpressWpUserResponsePayload) => {
-                // console.log('registerData', response);
+            .subscribe((response: WordpressWpUserResponsePayload) => {
                 if (response.code === 200) {
                     const loginPaylod: LoginPayload = {
                         username: registerData.email,
                         password: registerData.password,
                     };
+                    // console.log(loginPaylod);
                     this.store.dispatch(new AuthActions.GetAuthToken(loginPaylod));
                 }
             });
@@ -97,7 +109,6 @@ export class AuthState {
     */
     @Action(AuthActions.Login)
     async Login(ctx: StateContext<IAuthStateModel>, { loginPayload }: AuthActions.Login) {
-        // console.log(loginPayload);
         this.store.dispatch(new AuthActions.GetAuthToken(loginPayload));
     }
 
@@ -106,11 +117,7 @@ export class AuthState {
     */
     @Action(AuthActions.GetAuthToken)
     getAuthToken(ctx: StateContext<IAuthStateModel>, { loginPayload }: AuthActions.GetAuthToken) {
-        
-        
-        console.log(loginPayload);
-
-
+        this.loadingService.simpleLoader();
         this.wooApi.getAuthToken(loginPayload)
             .pipe(
                 takeUntil(this.ngUnsubscribe),
@@ -118,31 +125,35 @@ export class AuthState {
                     ctx.patchState({
                         isLoggedIn: false
                     });
+                    this.alertService.presentSimpleAlert(e.message);
                     this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(e));
+                    this.loadingService.dismissLoader();
                     return new Observable(obs => obs.error(e));
                 })
             )
             .subscribe((user: IUserResponseModel) => {
-                console.log(user);
-                this.wooApi.setUser({
-                    token: user?.token,
-                    user_display_name: user?.user_display_name,
-                    user_email: user?.user_email,
-                    user_nicename: user?.user_nicename,
-                }).then(() => {
-                    this.router.navigateByUrl('product-list').then(() => {
-                        return ctx.patchState({
-                            user: {
-                                token: user?.token,
-                                user_display_name: user?.user_display_name,
-                                user_email: user?.user_email,
-                                user_nicename: user?.user_nicename,
-                            },
-                            isLoggedIn: true
+                if(user){
+                    this.wooApi.setUser({
+                        token: user?.token,
+                        user_display_name: user?.user_display_name,
+                        user_email: user?.user_email,
+                        user_nicename: user?.user_nicename,
+                    }).then(() => {
+                        this.router.navigateByUrl('product-list').then(() => {
+                            return ctx.patchState({
+                                user: {
+                                    token: user?.token,
+                                    user_display_name: user?.user_display_name,
+                                    user_email: user?.user_email,
+                                    user_nicename: user?.user_nicename,
+                                },
+                                isLoggedIn: true
+                            });
                         });
                     });
-                });
+                }
             });
+        this.loadingService.dismissLoader();
     }
 
     @Action(AuthActions.GenerateAuthCookie)
@@ -166,7 +177,7 @@ export class AuthState {
 
     @Action(AuthActions.RetrievePassword)
     RetrievePassword(ctx: StateContext<IAuthStateModel>, { payload }: AuthActions.RetrievePassword) {
-        console.log(payload.username);
+        // console.log(payload.username);
         this.wooApi.retrievePassword(payload.username)
             .pipe(
                 takeUntil(this.ngUnsubscribe),
@@ -180,7 +191,7 @@ export class AuthState {
             )
             .subscribe({
                 next(response: WordpressWpUserResponsePayload) {
-                    console.log('got value ' + JSON.stringify(response));
+                    // console.log('got value ' + JSON.stringify(response));
                     return ctx.patchState({
                         isLoggedIn: false,
                         retrievePasswordResponseCode: response.code,
@@ -210,7 +221,7 @@ export class AuthState {
                 })
             )
             .subscribe((user: UserResponse) => {
-                console.log(user);
+                // console.log(user);
                 if (user) {
                     ctx.patchState({
                         user: {

@@ -11,7 +11,7 @@ export interface ILoginFacadeState {
 @Injectable({
     providedIn: 'root'
 })
-export class LoginFacade {
+export class AuthFacade {
 
     @Select(AuthState.isLoggedIn) isLoggedIn$!: Observable<boolean>;
 

@@ -8,10 +8,30 @@ import { AlertController } from '@ionic/angular';
 export class AlertService {
 
   private alertController = inject(AlertController);
-  
+
   private router = inject(Router);
 
   async presentSimpleAlert(
+    message: string,
+  ) {
+    const alertButtons = [
+      {
+        text: 'OK',
+        role: 'confirm',
+        htmlAttributes: {
+          'aria-label': 'confirm',
+        },
+      },
+    ];
+    const alert = await this.alertController.create({
+      message,
+      buttons: alertButtons,
+    });
+
+    await alert.present();
+  }
+
+  async presentSimpleAlertNavigate(
     // header: string,
     // subHeader: string,
     message: string,

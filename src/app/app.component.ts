@@ -63,12 +63,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor() {
     this.viewState$ = this.facade.viewState$;
+    // this.viewState$.subscribe(vs=>{
+    //   console.log('@@@@:: ', vs);
+    // });
   }
 
   ionViewDidEnter() {
-    this.viewState$.subscribe(vs=>{
-      console.log(vs);
-    });
   }
   async ngOnInit() {
     await this.appInit();
@@ -84,7 +84,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
       if (this.platform.is('hybrid')) {
         if (this.platform.is('android') || this.platform.is('ios')) {
-          // this.keyboardService.setAccessoryBarVisible(true).catch(() => { });
+          this.keyboardService.setAccessoryBarVisible(true).catch(() => { });
           this.keyboardService.initKeyboardListeners();
           this.fcm.listenersPushInit();
         }

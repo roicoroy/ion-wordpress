@@ -1,0 +1,10 @@
+.top-col {
+    position: fixed;
+    z-index: 9;
+}
+
+ion-grid {
+    position: relative;
+    overflow: hidden;
+    top: 17.5vh;
+}

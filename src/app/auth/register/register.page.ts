@@ -1,35 +1,51 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { PrivacyComponent } from 'src/app/components/privacy/privacy.component';
-import { TermsOfServiceComponent } from 'src/app/components/terms-of-service/terms-of-service.component';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { PasswordValidator } from 'src/app/shared/form-validators/password.validator';
-import { ModalController, MenuController } from '@ionic/angular/standalone';
+import { MenuController } from '@ionic/angular/standalone';
 import { ShowHidePasswordComponent } from 'src/app/components/show-hide-password/show-hide-password.component';
 import { RegisterWpUserPayload } from 'src/app/shared/wooApi';
 import { Store } from '@ngxs/store';
 import { Subject } from 'rxjs';
 import { AuthActions } from 'src/app/store/auth/auth.actions';
 import { ModalService } from 'src/app/shared/utils/modal.service';
+import { AlertService } from 'src/app/shared/utils/alert.service';
+import { AuthHeaderComponent } from 'src/app/components/auth-header/auth-header.component';
+import { IAuthHeader } from '../interfaces';
+import { KeypadModule } from 'src/app/shared/native/keyboard/keypad.module';
+import { scaleHeight } from 'src/app/shared/animations/animations';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.page.html',
-  styleUrls: ['./register.page.scss'],
+  styleUrls: ['../auth.styles.scss'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    scaleHeight()
+  ],
   imports: [
     IonicModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     RouterLink,
-    RouterLinkActive,
-    ShowHidePasswordComponent
+    ShowHidePasswordComponent,
+    AuthHeaderComponent,
+    KeypadModule
   ]
 })
 export class RegisterPage implements OnInit, OnDestroy {
+
+  authHeader: IAuthHeader = {
+    image: 'assets/shapes.svg',
+    title: 'Register',
+    subtitle: 'Join the club'
+  }
+  
+  pageTitle = 'Register';
 
   signupForm: FormGroup;
 
@@ -59,28 +75,29 @@ export class RegisterPage implements OnInit, OnDestroy {
 
   private modalService = inject(ModalService);
 
+  private menu = inject(MenuController);
+
+  private alert = inject(AlertService);
+
   private readonly ngUnsubscribe = new Subject();
 
-  constructor(
-    public router: Router,
-    public menu: MenuController
-  ) {
+  constructor() {
     this.matching_passwords_group = new FormGroup({
-      'password': new FormControl('Password123!', Validators.compose([
+      'password': new FormControl('', Validators.compose([
         Validators.minLength(5),
         Validators.required
       ])),
-      'confirm_password': new FormControl('Password123!', Validators.required)
+      'confirm_password': new FormControl('', Validators.required)
     }, (formGroup: FormGroup | any) => {
       return PasswordValidator.areNotEqual(formGroup);
     });
 
     this.signupForm = new FormGroup({
-      'email': new FormControl('gokuss@email.com', Validators.compose([
+      'email': new FormControl('', Validators.compose([
         Validators.required,
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
       ])),
-      'username': new FormControl('Son4', Validators.compose([
+      'username': new FormControl('', Validators.compose([
         Validators.required
       ])),
       'matching_passwords': this.matching_passwords_group

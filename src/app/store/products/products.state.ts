@@ -1,30 +1,29 @@
 
-import { Injectable } from '@angular/core';
-import { State, Selector, Action, StateContext } from '@ngxs/store';
-import { tap, catchError, Observable } from 'rxjs';
+import { Injectable, OnDestroy, inject } from '@angular/core';
+import { State, Selector, Action, StateContext, Store } from '@ngxs/store';
+import { tap, catchError, Observable, Subject, takeUntil } from 'rxjs';
 import { ProductsActions } from './products.actions';
 import { WoocommerceProductsService } from 'src/app/shared/wooApi';
 import { Product } from '../../shared/wooApi/products/product.interface';
+import { ErrorLoggingActions } from '../errors-logging/errors-logging.actions';
 
 export interface IProductsStateModel {
-    products?: Product[] | any;
-    selectedProduct?: Product | null;
+    products: Product[];
 }
 
 @State<IProductsStateModel>({
     name: 'products',
-    defaults: {
-        products: null
-    },
 })
 @Injectable({
     providedIn: 'root'
 })
-export class ProductsState {
+export class ProductsState implements OnDestroy{
 
-    constructor(
-        private wooProducts: WoocommerceProductsService
-    ) { }
+    private store = inject(Store);
+    
+    private wooProducts = inject(WoocommerceProductsService);
+    
+    private readonly ngUnsubscribe = new Subject();
 
     @Selector()
     static getProducts(state: IProductsStateModel): Product[] {
@@ -35,30 +34,23 @@ export class ProductsState {
     retrieveProducts(ctx: StateContext<IProductsStateModel>) {
         this.wooProducts.retrieveProducts()
             .pipe(
-                tap((response: Product[] | any) => {
-                    ctx.patchState({
+                takeUntil(this.ngUnsubscribe),
+                catchError(e => {
+                    this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(e));
+                    return new Observable(obs => obs.error(e));
+                }),
+            )
+            .subscribe((response:any) => {
+                if(response.products){
+                    return ctx.patchState({
                         products: response.products,
                     });
-                }),
-                catchError(e => {
-                    return new Observable(obs => obs.error(e));
-                })
-            )
-            .subscribe((response) => {
+                }
             });
     }
 
-    @Action(ProductsActions.SetSelectedProducts)
-    setSelectedResult(ctx: StateContext<IProductsStateModel>, { payload }: ProductsActions.SetSelectedProducts) {
-        ctx.patchState({
-            selectedProduct: payload
-        });
-    }
-
-    @Action(ProductsActions.RemoveSelectedProducts)
-    removeSelectedResult(ctx: StateContext<IProductsStateModel>) {
-        ctx.patchState({
-            selectedProduct: null
-        });
+    ngOnDestroy(): void {
+        this.ngUnsubscribe.next(null);
+        this.ngUnsubscribe.complete();
     }
 }

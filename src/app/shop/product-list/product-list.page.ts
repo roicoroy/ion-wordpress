@@ -64,9 +64,7 @@ export class ProductListPage implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (p: IHomeListModel) => {
-          console.log(p);
           this.productsList = p.products;
-          // console.log(this.productsList);
         },
         error: (e) => {
           console.error(e)
@@ -77,16 +75,11 @@ export class ProductListPage implements OnInit, OnDestroy {
       });
   }
 
-  ionViewWillEnter() {
-  }
-
   ngOnInit() {
     this.swiperInit()
   }
 
   openGallery(gallery: Images[] | undefined, index: number): void {
-    console.log(gallery);
-
     const album: IAlbum[] | any = gallery?.map((element: any, i) => ({
       src: element.src,
       thumb: element.src,
