@@ -39,7 +39,6 @@ export class PostsPage implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(routeData => {
         const data = routeData['data'];
-
         this.posts = data.posts;
         this.categoryId = data.categoryId;
         this.categoryTitle = data.categoryTitle;

@@ -63,7 +63,7 @@ export class ForgotPasswordPage implements OnInit, OnDestroy {
 
   constructor() {
     this.forgotPasswordForm = new FormGroup({
-      'username': new FormControl('yumi', Validators.compose([
+      'username': new FormControl('', Validators.compose([
         Validators.required,
       ])),
     });
@@ -84,10 +84,12 @@ export class ForgotPasswordPage implements OnInit, OnDestroy {
           return new Observable(obs => obs.error(e));
         })
       )
-      .subscribe((vs: IStoreSnapshoModel) => {
-        console.log(vs.auth.retrievePasswordResponseCode);
+      .subscribe(async(vs: IStoreSnapshoModel) => {
+        
+        console.log(vs.auth);
+        
         if (vs.auth.retrievePasswordResponseCode === 200) {
-          this.alert.presentSimpleAlertNavigate(vs.auth.retrievePasswordResponseMessage, 'login');
+          await this.alert.presentSimpleAlertNavigate(vs.auth.retrievePasswordResponseMessage, 'login');
         }
       });
   }

@@ -1,7 +1,8 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { AlertController, AlertOptions } from "@ionic/angular";
 import { State, Store, Action, StateContext } from "@ngxs/store";
 import { ErrorLoggingActions } from "./errors-logging.actions";
+import { AlertService } from "src/app/shared/utils/alert.service";
 
 export class ErrosStateModel {
     entries!: Error[];
@@ -12,13 +13,18 @@ export class ErrosStateModel {
 })
 @Injectable()
 export class ErrorsLoggingState {
+
     errorEntries: Error[] = [];
-    
-    constructor(
-    ) { }
+
+    private alertService = inject(AlertService);
 
     @Action(ErrorLoggingActions.LogErrorEntry)
-    logErrorEntry(ctx: StateContext<unknown>, action: ErrorLoggingActions.LogErrorEntry): void {
+    async logErrorEntry(ctx: StateContext<unknown>, action: ErrorLoggingActions.LogErrorEntry): Promise<void> {
+        if (action.error.error?.message) {
+            await this.alertService.presentSimpleAlert(action.error.error?.message);
+        } else if (action.error) {
+            await this.alertService.presentSimpleAlert(action.error);
+        }
         this.errorEntries.push(action.error);
         ctx.patchState({
             entries: this.errorEntries,
@@ -31,5 +37,4 @@ export class ErrorsLoggingState {
             entries: null,
         });
     }
-
 }

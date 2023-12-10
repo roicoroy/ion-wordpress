@@ -76,11 +76,12 @@ export class AuthState implements OnDestroy {
      * Register
     */
     @Action(AuthActions.Register)
-    register(ctx: StateContext<IAuthStateModel>, { registerData }: AuthActions.Register) {
+    async register(ctx: StateContext<IAuthStateModel>, { registerData }: AuthActions.Register) {
+        await this.loadingService.simpleLoader();
         this.wooApi.register(registerData)
             .pipe(
                 takeUntil(this.ngUnsubscribe),
-                catchError((e: any) => {
+                catchError(async (e: any) => {
                     ctx.patchState({
                         isLoggedIn: false,
                         registerPasswordResponseCode: e.code,
@@ -88,18 +89,20 @@ export class AuthState implements OnDestroy {
                     });
                     const error = new Error(e.message);
                     this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(error));
-                    this.alertService.presentSimpleAlert(e.error.message);
+                    await this.loadingService.dismissLoader();
                     return new Observable(obs => obs.error(e));
                 })
             )
-            .subscribe((response: WordpressWpUserResponsePayload) => {
+            .subscribe(async (response: WordpressWpUserResponsePayload) => {
                 if (response.code === 200) {
                     const loginPaylod: LoginPayload = {
                         username: registerData.email,
                         password: registerData.password,
                     };
-                    // console.log(loginPaylod);
                     this.store.dispatch(new AuthActions.GetAuthToken(loginPaylod));
+                    await this.loadingService.dismissLoader();
+                } else {
+                    await this.loadingService.dismissLoader();
                 }
             });
     }
@@ -125,14 +128,13 @@ export class AuthState implements OnDestroy {
                     ctx.patchState({
                         isLoggedIn: false
                     });
-                    this.alertService.presentSimpleAlert(e.message);
                     this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(e));
                     this.loadingService.dismissLoader();
                     return new Observable(obs => obs.error(e));
                 })
             )
             .subscribe((user: IUserResponseModel) => {
-                if(user){
+                if (user) {
                     this.wooApi.setUser({
                         token: user?.token,
                         user_display_name: user?.user_display_name,
@@ -151,9 +153,12 @@ export class AuthState implements OnDestroy {
                             });
                         });
                     });
+                    this.loadingService.dismissLoader();
+                } else {
+                    this.loadingService.dismissLoader();
                 }
             });
-        this.loadingService.dismissLoader();
+
     }
 
     @Action(AuthActions.GenerateAuthCookie)
@@ -176,34 +181,27 @@ export class AuthState implements OnDestroy {
     }
 
     @Action(AuthActions.RetrievePassword)
-    RetrievePassword(ctx: StateContext<IAuthStateModel>, { payload }: AuthActions.RetrievePassword) {
-        // console.log(payload.username);
+    async RetrievePassword(ctx: StateContext<IAuthStateModel>, { payload }: AuthActions.RetrievePassword) {
+        await this.loadingService.simpleLoader();
         this.wooApi.retrievePassword(payload.username)
             .pipe(
                 takeUntil(this.ngUnsubscribe),
-                catchError(e => {
+                catchError(async (e: any) => {
                     ctx.patchState({
                         isLoggedIn: false
                     });
                     this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(e));
+                    await this.loadingService.dismissLoader();
                     return new Observable(obs => obs.error(e));
                 })
             )
-            .subscribe({
-                next(response: WordpressWpUserResponsePayload) {
-                    // console.log('got value ' + JSON.stringify(response));
-                    return ctx.patchState({
-                        isLoggedIn: false,
-                        retrievePasswordResponseCode: response.code,
-                        retrievePasswordResponseMessage: response.message
-                    });
-                },
-                error(err) {
-                    console.error('something wrong occurred: ' + err);
-                },
-                complete() {
-                    console.log('done');
-                },
+            .subscribe(async (response: WordpressWpUserResponsePayload) => {
+                await this.loadingService.dismissLoader();
+                return ctx.patchState({
+                    isLoggedIn: false,
+                    retrievePasswordResponseCode: response.code,
+                    retrievePasswordResponseMessage: response.message
+                })
             });
     }
 
@@ -221,7 +219,6 @@ export class AuthState implements OnDestroy {
                 })
             )
             .subscribe((user: UserResponse) => {
-                // console.log(user);
                 if (user) {
                     ctx.patchState({
                         user: {
