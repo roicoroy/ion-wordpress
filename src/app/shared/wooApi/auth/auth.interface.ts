@@ -56,3 +56,14 @@ export interface LoginPayload {
   username?: string | any;
   password?: string | any;
 }
+
+export interface RetrievePasswordPayload {
+  username: string;
+}
+
+export interface UserResponse {
+  token?: string | any;
+  user_display_name?: string | any;
+  user_email?: string | any;
+  user_nicename?: string | any;
+}

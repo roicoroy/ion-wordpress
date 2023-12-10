@@ -1,13 +1,11 @@
 import { Injectable, inject } from "@angular/core";
 import { Action, Selector, State, StateContext, Store } from "@ngxs/store";
-import { AuthService, CreateNonceRes, LoginPayload, WordpressWpUserResponsePayload } from "src/app/shared/wooApi";
-import { tap, catchError, Observable, from, takeUntil, Subject } from "rxjs";
+import { AuthService, CreateNonceRes, LoginPayload, UserResponse, WordpressWpUserResponsePayload } from "src/app/shared/wooApi";
+import { tap, catchError, Observable, Subject, takeUntil } from "rxjs";
 import { AuthActions } from "./auth.actions";
 import { IStoreSnapshoModel } from "../store.snapshot.interface";
 import { IonStorageService } from "src/app/shared/utils/ionstorage.service";
 import { ErrorLoggingActions } from "../errors-logging/errors-logging.actions";
-import { RegisterUserInterface, SimpleJwtLogin } from "src/app/shared/wordpress/wordpress-simple-jwt-login";
-import { environment } from "src/environments/environment";
 import { Router } from "@angular/router";
 
 export interface IUserResponseModel {
@@ -20,21 +18,21 @@ export interface IUserResponseModel {
 export interface IAuthStateModel {
     user: IUserResponseModel,
     isLoggedIn: boolean,
-    resgistrationResponseCode: number | null,
+    retrievePasswordResponseCode: number,
+    retrievePasswordResponseMessage: string,
 }
 
 @State<IAuthStateModel>({
     name: 'auth',
-    defaults: {
-        user: {
-            token: null,
-            user_display_name: null,
-            user_email: null,
-            user_nicename: null,
-        },
-        isLoggedIn: false,
-        resgistrationResponseCode: null
-    },
+    // defaults: {
+    //     user: {
+    //         token: null,
+    //         user_display_name: null,
+    //         user_email: null,
+    //         user_nicename: null,
+    //     },
+    //     isLoggedIn: false,
+    // },
 })
 @Injectable({
     providedIn: 'root'
@@ -73,6 +71,7 @@ export class AuthState {
     register(ctx: StateContext<IAuthStateModel>, { registerData }: AuthActions.Register) {
         this.wooApi.register(registerData)
             .pipe(
+                takeUntil(this.ngUnsubscribe),
                 catchError(e => {
                     ctx.patchState({
                         isLoggedIn: false
@@ -82,50 +81,39 @@ export class AuthState {
                 })
             )
             .subscribe(async (response: WordpressWpUserResponsePayload) => {
-                console.log('registerData', response);
+                // console.log('registerData', response);
                 if (response.code === 200) {
                     const loginPaylod: LoginPayload = {
                         username: registerData.email,
                         password: registerData.password,
                     };
-                    this.store.dispatch(new AuthActions.DoLogin(loginPaylod))
-                        .pipe(takeUntil(this.ngUnsubscribe))
-                        .subscribe((vs) => {
-                            console.log(vs);
-                            this.router.navigate(['/product-list']);
-                        });
+                    this.store.dispatch(new AuthActions.GetAuthToken(loginPaylod));
                 }
-
-
-                ctx.patchState({
-                    resgistrationResponseCode: response.code,
-                    isLoggedIn: false,
-
-                });
             });
-
-        // const stateUser = this.store.selectSnapshot((state: IStoreSnapshoModel) => state.auth.user);
-        // if (stateUser.token) {
-        // }
     }
 
     /* 
      * Do Login
     */
-    @Action(AuthActions.DoLogin)
-    async doLogin(ctx: StateContext<IAuthStateModel>, { data }: AuthActions.DoLogin) {
-        return this.wooApi.login(data.username, data.password).subscribe((res) => {
-            console.log(res);
-        });
+    @Action(AuthActions.Login)
+    async Login(ctx: StateContext<IAuthStateModel>, { loginPayload }: AuthActions.Login) {
+        // console.log(loginPayload);
+        this.store.dispatch(new AuthActions.GetAuthToken(loginPayload));
     }
 
     /* 
      * Auth Token
     */
     @Action(AuthActions.GetAuthToken)
-    getAuthToken(ctx: StateContext<IAuthStateModel>, { payload }: AuthActions.GetAuthToken) {
-        this.wooApi.getAuthToken(payload)
+    getAuthToken(ctx: StateContext<IAuthStateModel>, { loginPayload }: AuthActions.GetAuthToken) {
+        
+        
+        console.log(loginPayload);
+
+
+        this.wooApi.getAuthToken(loginPayload)
             .pipe(
+                takeUntil(this.ngUnsubscribe),
                 catchError(e => {
                     ctx.patchState({
                         isLoggedIn: false
@@ -135,46 +123,34 @@ export class AuthState {
                 })
             )
             .subscribe((user: IUserResponseModel) => {
-                ctx.patchState({
-                    user: {
-                        token: user?.token,
-                        user_display_name: user?.user_display_name,
-                        user_email: user?.user_email,
-                        user_nicename: user?.user_nicename,
-                    },
-                    isLoggedIn: true
-                });
-
-            });
-    }
-
-    @Action(AuthActions.CreateNonceAction)
-    createNonceAction(ctx: StateContext<IAuthStateModel>, { payload }: AuthActions.CreateNonceAction) {
-        this.wooApi.createNonce(payload)
-            .pipe(
-                catchError(e => {
-                    ctx.patchState({
-                        isLoggedIn: false
+                console.log(user);
+                this.wooApi.setUser({
+                    token: user?.token,
+                    user_display_name: user?.user_display_name,
+                    user_email: user?.user_email,
+                    user_nicename: user?.user_nicename,
+                }).then(() => {
+                    this.router.navigateByUrl('product-list').then(() => {
+                        return ctx.patchState({
+                            user: {
+                                token: user?.token,
+                                user_display_name: user?.user_display_name,
+                                user_email: user?.user_email,
+                                user_nicename: user?.user_nicename,
+                            },
+                            isLoggedIn: true
+                        });
                     });
-                    this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(e));
-                    return new Observable(obs => obs.error(e));
-                })
-            )
-            .subscribe((res: CreateNonceRes) => {
-                console.log(res);
+                });
             });
-    }
-
-    @Action(AuthActions.RetrievePassword)
-    RetrievePassword(ctx: StateContext<IAuthStateModel>, { username }: AuthActions.RetrievePassword) {
-        console.log(username);
     }
 
     @Action(AuthActions.GenerateAuthCookie)
-    generateAuthCookie(ctx: StateContext<IAuthStateModel>, { data }: AuthActions.GenerateAuthCookie) {
+    generateAuthCookie(ctx: StateContext<IAuthStateModel>, { loginPayload }: AuthActions.GenerateAuthCookie) {
         // console.log(data);
-        this.wooApi.generateAuthCookie(data)
+        this.wooApi.generateAuthCookie(loginPayload)
             .pipe(
+                takeUntil(this.ngUnsubscribe),
                 tap((user: IUserResponseModel) => {
                     console.log(user);
                 }),
@@ -188,46 +164,65 @@ export class AuthState {
             });
     }
 
-    @Action(AuthActions.RefresUserState)
-    async refresUserState(ctx: StateContext<IAuthStateModel>, { }: AuthActions.RefresUserState) {
-        const storageUser = await this.wooApi.getUser();
-        const stateUser = this.store.selectSnapshot((state: IStoreSnapshoModel) => state.auth.user);
-        if (storageUser) {
-            ctx.patchState({
-                user: {
-                    token: storageUser?.token,
-                    user_display_name: storageUser?.user_display_name,
-                    user_email: storageUser?.user_email,
-                    user_nicename: storageUser?.user_nicename,
+    @Action(AuthActions.RetrievePassword)
+    RetrievePassword(ctx: StateContext<IAuthStateModel>, { payload }: AuthActions.RetrievePassword) {
+        console.log(payload.username);
+        this.wooApi.retrievePassword(payload.username)
+            .pipe(
+                takeUntil(this.ngUnsubscribe),
+                catchError(e => {
+                    ctx.patchState({
+                        isLoggedIn: false
+                    });
+                    this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(e));
+                    return new Observable(obs => obs.error(e));
+                })
+            )
+            .subscribe({
+                next(response: WordpressWpUserResponsePayload) {
+                    console.log('got value ' + JSON.stringify(response));
+                    return ctx.patchState({
+                        isLoggedIn: false,
+                        retrievePasswordResponseCode: response.code,
+                        retrievePasswordResponseMessage: response.message
+                    });
                 },
-                isLoggedIn: true
+                error(err) {
+                    console.error('something wrong occurred: ' + err);
+                },
+                complete() {
+                    console.log('done');
+                },
             });
-        } else if (stateUser) {
-            this.wooApi.setUser({
-                token: stateUser?.token,
-                user_display_name: stateUser?.user_display_name,
-                user_email: stateUser?.user_email,
-                user_nicename: stateUser?.user_nicename,
-            });
-        } else {
-            ctx.patchState({
-                user: {
-                    token: '',
-                    user_display_name: '',
-                    user_email: '',
-                    user_nicename: '',
-                }
-            });
-        }
-
     }
 
-    @Action(AuthActions.AuthLogout)
-    authLogout(ctx: StateContext<IAuthStateModel>, { }: AuthActions.AuthLogout) {
-        return this.ionStorage.storageRemove('user')
-            .then(
-                (res) => {
-                    return ctx.patchState({
+    @Action(AuthActions.RefresUserState)
+    async refresUserState(ctx: StateContext<IAuthStateModel>, { }: AuthActions.RefresUserState) {
+        this.ionStorage.getKeyAsObservable('user')
+            .pipe(
+                takeUntil(this.ngUnsubscribe),
+                catchError(e => {
+                    ctx.patchState({
+                        isLoggedIn: false
+                    });
+                    this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(e));
+                    return new Observable(obs => obs.error(e));
+                })
+            )
+            .subscribe((user: UserResponse) => {
+                console.log(user);
+                if (user) {
+                    ctx.patchState({
+                        user: {
+                            token: user.token,
+                            user_display_name: user.user_display_name,
+                            user_email: user.user_email,
+                            user_nicename: user.user_nicename,
+                        },
+                        isLoggedIn: true
+                    });
+                } else {
+                    ctx.patchState({
                         user: {
                             token: null,
                             user_display_name: null,
@@ -236,12 +231,47 @@ export class AuthState {
                         },
                         isLoggedIn: false
                     });
-                },
+                }
+            });
+    }
+
+    @Action(AuthActions.AuthLogout)
+    authLogout(ctx: StateContext<IAuthStateModel>, { }: AuthActions.AuthLogout) {
+        return this.ionStorage.storageRemove('user')
+            .then(() => {
+                return ctx.patchState({
+                    user: {
+                        token: null,
+                        user_display_name: null,
+                        user_email: null,
+                        user_nicename: null,
+                    },
+                    isLoggedIn: false
+                });
+            },
                 (e) => {
                     this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(e));
                     console.log('Error logging out');
                 }
             )
+    }
+
+    @Action(AuthActions.CreateNonceAction)
+    createNonceAction(ctx: StateContext<IAuthStateModel>, { payload }: AuthActions.CreateNonceAction) {
+        this.wooApi.createNonce(payload)
+            .pipe(
+                takeUntil(this.ngUnsubscribe),
+                catchError(e => {
+                    ctx.patchState({
+                        isLoggedIn: false
+                    });
+                    this.store.dispatch(new ErrorLoggingActions.LogErrorEntry(e));
+                    return new Observable(obs => obs.error(e));
+                })
+            )
+            .subscribe((res: CreateNonceRes) => {
+                console.log(res);
+            });
     }
 
     ngOnDestroy(): void {

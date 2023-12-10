@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 
 @Injectable({
@@ -6,9 +6,7 @@ import { LoadingController } from '@ionic/angular';
 })
 export class LoadingService {
 
-  constructor(
-    private loadingController: LoadingController
-  ) { }
+  private loadingController = inject(LoadingController);
 
   // Simple loader
   async simpleLoader() {
@@ -22,7 +20,6 @@ export class LoadingService {
   // Dismiss loader
   async dismissLoader() {
     await this.loadingController.dismiss().then((response) => {
-      // console.log('Loader closed!', response);
     }).catch((err) => {
       console.log('Error occured : ', err);
     });

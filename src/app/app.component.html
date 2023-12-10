@@ -23,6 +23,16 @@
               <ion-label>{{ p.title }}</ion-label>
             </ion-item>
           </ion-menu-toggle>
+          
+          <ion-menu-toggle auto-hide="false">
+            <ion-item routerDirection="root" [routerLink]="['login']" lines="none" detail="false"
+              routerLinkActive="selected">
+              <ion-label>
+                {{ 'Login' }}
+              </ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          
           <ion-menu-toggle auto-hide="false">
             <ion-item (click)="logout()">
               <ion-label>
@@ -30,6 +40,7 @@
               </ion-label>
             </ion-item>
           </ion-menu-toggle>
+          
         </ion-list>
       </ion-content>
     </ion-menu>

@@ -1,16 +1,14 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, concatMap, map } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 
 import { WoocommerceHelperService } from '../helper.service';
-import { CreateNonce, CreateNonceRes, RegisterPayload, LoginPayload } from './auth.interface';
-import { Observable, Subject, from, of } from 'rxjs';
+import { CreateNonce, RegisterPayload, LoginPayload } from './auth.interface';
+import { Observable } from 'rxjs';
 import { Store } from '@ngxs/store';
 import { IStoreSnapshoModel } from 'src/app/store/store.snapshot.interface';
 import { IonStorageService } from '../../utils/ionstorage.service';
 import { environment } from 'src/environments/environment';
-import { IUserResponseModel } from 'src/app/store/auth/auth.state';
-import { SimpleJwtLogin } from '../../wordpress/wordpress-simple-jwt-login';
 
 // Plugins used https://wordpress.org/plugins/json-api-user/
 
@@ -55,9 +53,10 @@ export class AuthService {
   }
 
   retrievePassword(username: string): Observable<any> {
-    const payload = this.wooHelper.includeEncoded({ user_login: username });
-    return this.httpClient.post(`api/user/retrieve_password/`, payload)
-      .pipe(catchError(err => this.wooHelper.handleError(err)));
+    // const payload = this.wooHelper.includeEncoded({ username: username });
+    return this.httpClient.post(`wp-json/wp/v2/users/lostpassword/`, {
+      user_login: username
+    }).pipe(catchError(err => this.wooHelper.handleError(err)));
   }
 
   getAuthToken(payload: LoginPayload): Observable<any> {

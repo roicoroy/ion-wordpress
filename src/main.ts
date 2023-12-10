@@ -93,7 +93,7 @@ bootstrapApplication(AppComponent, {
         'auth',
         'customer',
         'products',
-        'profile',
+        'settings',
         'errors'
       ]
     })),

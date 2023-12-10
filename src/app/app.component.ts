@@ -36,7 +36,7 @@ export class AppComponent implements OnInit, OnDestroy {
     { title: 'Nd Graphics', url: '/nd-graphics', icon: 'bookmark' },
     { title: 'Home', url: '/home', icon: 'home' },
     { title: 'Woo', url: '/product-list', icon: 'storefront' },
-    { title: 'Login', url: '/login', icon: 'paper-plane' },
+    // { title: 'Login', url: '/login', icon: 'paper-plane' },
     { title: 'Blog', url: '/posts', icon: 'archive' },
     { title: 'Settings', url: '/settings', icon: 'cog' },
   ];
@@ -62,10 +62,13 @@ export class AppComponent implements OnInit, OnDestroy {
   private readonly ngUnsubscribe = new Subject();
 
   constructor() {
+    this.viewState$ = this.facade.viewState$;
   }
 
   ionViewDidEnter() {
-    this.viewState$ = this.facade.viewState$;
+    this.viewState$.subscribe(vs=>{
+      console.log(vs);
+    });
   }
   async ngOnInit() {
     await this.appInit();

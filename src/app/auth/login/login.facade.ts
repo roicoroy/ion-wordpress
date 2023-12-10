@@ -1,20 +1,17 @@
-import { Injectable } from '@angular/core';
-import { Select } from '@ngxs/store';
+import { Injectable, inject } from '@angular/core';
+import { Select, Store } from '@ngxs/store';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Product } from 'src/app/shared/wooApi';
 import { AuthState, IUserResponseModel } from 'src/app/store/auth/auth.state';
-import { ProductsState } from 'src/app/store/products/products.state';
 
-export interface IAppFacadeModel {
-    user: IUserResponseModel,
+export interface ILoginFacadeState {
     isLoggedIn: boolean
 }
 
 @Injectable({
     providedIn: 'root'
 })
-export class AppFacade {
+export class LoginFacade {
 
     @Select(AuthState.isLoggedIn) isLoggedIn$!: Observable<boolean>;
 

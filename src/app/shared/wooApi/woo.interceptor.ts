@@ -43,7 +43,7 @@ export class WooInterceptor implements HttpInterceptor {
 
         let authRequest;
         let requestUrl = '';
-        const token = this.store.selectSnapshot((state: IStoreSnapshoModel) => state.auth.user.token);
+        const token = this.store.selectSnapshot((state: IStoreSnapshoModel) => state.auth.user?.token);
 
         if (request.url.includes('i18n')) {
             authRequest = request.clone({
